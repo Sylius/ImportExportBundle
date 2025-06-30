@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\GridImportExport\Twig\Component;
+namespace Sylius\GridImportExport\Twig\Component;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;

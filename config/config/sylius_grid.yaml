@@ -1,0 +1,5 @@
+sylius_grid:
+    templates:
+        action:
+            export: '@SyliusGridImportExport\admin\import_export\grid\action\export.html.twig'
+

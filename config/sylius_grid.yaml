@@ -1,5 +1,0 @@
-sylius_grid:
-    templates:
-        action:
-            export: '@SyliusB2BKitPlugin\admin\import_export\grid\action\export.html.twig'
-

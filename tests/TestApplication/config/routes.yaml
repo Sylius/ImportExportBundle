@@ -1,0 +1,2 @@
+sylius_grid_import_export:
+    resource: "@SyliusGridImportExportBundle/config/routes.yaml"

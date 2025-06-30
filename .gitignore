@@ -6,9 +6,9 @@
 /etc/build/*
 !/etc/build/.gitignore
 
-/tests/Application/yarn.lock
+/tests/TestApplication/.env.local
+/tests/TestApplication/.env.*.local
 
 /.phpunit.result.cache
 /behat.yml
-/phpspec.yml
 /phpunit.xml
