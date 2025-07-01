@@ -14,7 +14,7 @@
             <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius_import_export.custom_factory.process" />
             <argument type="service" id="sylius_grid_import_export.repository.process" />
-            <argument type="service" id="sylius_import_export.provider.resource_data.grid" />
+            <argument type="service" id="sylius_import_export.registry.resource_data_provider" />
             <argument type="service" id="sylius_grid_import_export.exporter_resolver" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />

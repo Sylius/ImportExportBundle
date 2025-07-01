@@ -41,12 +41,14 @@ final readonly class ExportActionAdminGridListener
             return;
         }
 
-        $section = $this->sectionProvider?->getSection() ?? $this->getRouteSection();
-        if ($this->exportableChecker->canBeExported($grid, $section)) {
+        if (
+            !$this->exportableChecker->canBeExported($grid, $this->sectionProvider?->getSection()) &&
+            !$this->exportableChecker->canBeExported($grid, $this->getRouteSection())
+        ) {
             return;
         }
 
-        // Introduce config for each case, default both
+        // TODO: Introduce config for each case, default both //
         $this->addInActionGroup($grid, ActionGroupInterface::MAIN_GROUP);
         $this->addInActionGroup($grid, ActionGroupInterface::BULK_GROUP);
     }

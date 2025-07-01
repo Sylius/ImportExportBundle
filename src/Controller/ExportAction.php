@@ -19,7 +19,6 @@ use Sylius\GridImportExport\Messenger\Command\ExportCommand;
 use Sylius\GridImportExport\Provider\ResourceIds\ResourcesIdsProviderInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
