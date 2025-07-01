@@ -15,6 +15,7 @@ namespace Sylius\GridImportExport\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,7 +31,11 @@ final class ExportResourceType extends AbstractType
     {
         $builder
             ->add('format', ChoiceType::class, [
+                'label' => 'sylius_grid_import_export.grid.form.format',
                 'choice_loader' => $this->choiceLoader,
+            ])
+            ->add('currentPage', CheckboxType::class, [
+                'label' => 'sylius_grid_import_export.grid.form.current_page',
             ])
             ->add('resourceClass', HiddenType::class)
         ;

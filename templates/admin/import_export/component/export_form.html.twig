@@ -1,20 +1,29 @@
-{# Rendered with \Sylius\GridImportExport\GridImportExport\Twig\Component\ExportResourceFormComponent #}
+{# Rendered with \Sylius\GridImportExport\Twig\Component\ExportResourceFormComponent #}
 
 {% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
 
 {% form_theme form '@SyliusAdmin/shared/form_theme.html.twig' %}
 
-{% set criteria = app.request.query.all()['criteria']|default({}) %}
+{% set export_parameters = {
+    'grid': grid,
+    'criteria': app.request.query.all()['criteria']|default({}),
+} %}
+
+{% set page = app.request.query.get('page', null) %}
+{% if page is not null %}
+    {% set export_parameters = export_parameters|merge({'page': page}) %}
+{% endif %}
 
 <div class="dropdown">
-     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-         {{ 'sylius_grid_import_export.ui.export'|trans }}
-     </button>
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ 'sylius_grid_import_export.ui.export'|trans }}
+    </button>
     <div class="dropdown-menu p-4">
-        {{ form_start(form, {'action': path('sylius_import_export.admin.resource.export', {'grid': grid, 'criteria': criteria}), 'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_start(form, {'action': path('sylius_import_export.admin.resource.export', export_parameters), 'attr': {'novalidate': 'novalidate'}}) }}
 
         <div class="mb-3">
             {{ form_row(form.format) }}
+            {{ form_row(form.currentPage) }}
         </div>
 
         <div class="d-flex justify-content-end">

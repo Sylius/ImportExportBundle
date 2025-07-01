@@ -40,14 +40,15 @@ final class ExportAction
         $form = $this->formFactory->create($this->exportForm);
         $form->handleRequest($request);
 
-        $format = $form->getData()['format'];
-        $resourceClass = $form->getData()['resourceClass'];
+        $data = $form->getData();
+        $format = $data['format'];
+        $resourceClass = $data['resourceClass'];
 
         $metadata = $this->metadataRegistry->getByClass($resourceClass);
 
         $resourceIds = $this->resourcesIdsProvider->getResourceIds(
             metadata: $metadata,
-            context: ['request' => $request],
+            context: ['request' => $request, 'currentPage' => $data['currentPage'] ?? false],
         );
 
         $this->commandBus->dispatch(new ExportCommand(

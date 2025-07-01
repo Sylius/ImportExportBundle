@@ -38,10 +38,10 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
             throw new ProviderException('Request is missing from the context.');
         }
 
-        return $this->doGetResourceIds($metadata, $request);
+        return $this->doGetResourceIds($metadata, $request, $context['currentPage'] ?? false);
     }
 
-    private function doGetResourceIds(MetadataInterface $metadata, Request $request): array
+    private function doGetResourceIds(MetadataInterface $metadata, Request $request, bool $currentPage): array
     {
         $resourceClass = $metadata->getClass('model');
         /** @var RepositoryInterface $repository */
@@ -64,6 +64,14 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
         }
 
         $ids = [];
+        if ($currentPage) {
+            foreach ($paginator->getCurrentPageResults() as $item) {
+                $ids[] = (string) $item->getId();
+            }
+
+            return $ids;
+        }
+
         foreach ($paginator->autoPagingIterator() as $item) {
             $ids[] = (string) $item->getId();
         }
