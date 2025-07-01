@@ -1,0 +1,11 @@
+<tr>
+    <td>{{ 'sylius.ui.created_at'|trans }}</td>
+    <td>{{ resource.createdAt|date('Y-m-d H:i:s') }}</td>
+</tr>
+
+{% if resource.updatedAt %}
+<tr>
+    <td>{{ 'sylius.ui.updated_at'|trans }}</td>
+    <td>{{ resource.updatedAt|date('Y-m-d H:i:s') }}</td>
+</tr>
+{% endif %}

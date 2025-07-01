@@ -1,0 +1,9 @@
+<div class="ui segment">
+    <h4 class="ui dividing header">{{ 'sylius.ui.general_info'|trans }}</h4>
+    
+    <table class="ui definition table">
+        <tbody>
+            {% sylius_hook 'sylius_grid_import_export.admin.process.show.content.sections.general' %}
+        </tbody>
+    </table>
+</div>

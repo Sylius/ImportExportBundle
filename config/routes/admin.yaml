@@ -15,9 +15,6 @@ sylius_grid_import_export_admin_process:
         redirect: index
         grid: sylius_grid_import_export_admin_process
         permission: true
-        vars:
-            all:
-                hook_prefix: 'sylius_b2b.admin.import_export.process'
     type: sylius.resource
 
 sylius_grid_import_export_admin_process_show:
@@ -30,4 +27,4 @@ sylius_grid_import_export_admin_process_show:
             template: '@SyliusAdmin/shared/crud/show.html.twig'
             permission: true
             vars:
-                hook_prefix: 'sylius_b2b.admin.import_export.process'
+                hook_prefix: 'sylius_grid_import_export.admin.process'

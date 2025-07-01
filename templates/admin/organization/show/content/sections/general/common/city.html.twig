@@ -1,0 +1,6 @@
+{% set data = hookable_metadata.context.data %}
+
+<tr>
+    <th class="w-50">{{ 'sylius.ui.city'|trans }}</th>
+    <td>{{ data.city|default('sylius_organization_plugin.ui.not_defined'|trans) }}</td>
+</tr>

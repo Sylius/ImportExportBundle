@@ -1,0 +1,5 @@
+{% if data.user.isOrganizationAdmin %}
+    {{ 'sylius_organization_plugin.ui.admin'|trans }}
+{% else %}
+    {{ 'sylius_organization_plugin.ui.user'|trans }}
+{% endif %}

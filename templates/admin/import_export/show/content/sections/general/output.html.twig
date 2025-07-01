@@ -1,0 +1,15 @@
+{% set resource = hookable_metadata.context.resource %}
+
+<div class="row">
+    <div class="col-12 col-md-4 fw-bold">{{ 'sylius_grid_import_export.ui.output_file'|trans }}</div>
+    <div class="col-12 col-md-8">
+        {% if resource.output %}
+            <a href="{{ asset('export/' ~ resource.output) }}" class="btn btn-sm btn-outline-primary" download>
+                <i class="icon icon-download"></i>
+                {{ resource.output }}
+            </a>
+        {% else %}
+            <em>{{ 'sylius_grid_import_export.ui.no_output'|trans }}</em>
+        {% endif %}
+    </div>
+</div>

@@ -14,22 +14,22 @@ sylius_grid:
             sorting:
                 createdAt: desc
             fields:
-                uuid:
-                    type: string
-                    label: sylius.ui.id
-                    sortable: ~
+                createdAt:
+                    type: datetime
+                    label: sylius.ui.created_at
                 type:
-                    type: string
+                    type: twig
                     label: sylius.ui.type
+                    options:
+                        template: '@SyliusGridImportExport\admin\import_export\grid\field\type.html.twig'
                 resource:
                     type: string
                     label: sylius.ui.resource
                 status:
-                    type: string
+                    type: twig
                     label: sylius.ui.status
-                createdAt:
-                    type: datetime
-                    label: sylius.ui.created_at
+                    options:
+                        template: '@SyliusGridImportExport\admin\import_export\grid\field\status.html.twig'
             actions:
                 item:
                     show:

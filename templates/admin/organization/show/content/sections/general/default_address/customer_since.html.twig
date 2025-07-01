@@ -1,0 +1,8 @@
+{% set data = hookable_metadata.context.data %}
+
+<tr>
+    <th class="w-50">{{ 'sylius.ui.customer_since'|trans }}</th>
+    <td>
+        {{ data.createdAt|default('sylius_organization_plugin.ui.not_defined'|trans) | date('Y-m-d H:i') }}
+    </td>
+</tr>

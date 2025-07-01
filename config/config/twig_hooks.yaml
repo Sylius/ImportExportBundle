@@ -1,0 +1,47 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_grid_import_export.admin.process.show.content':
+            sections:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections.html.twig'
+                priority: 0
+
+        'sylius_grid_import_export.admin.process.show.content.sections':
+            general:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general.html.twig'
+                priority: 0
+
+        'sylius_grid_import_export.admin.process.show.content.sections.general':
+            header:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/header.html.twig'
+                priority: 100
+            table:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/table.html.twig'
+                priority: 0
+
+        'sylius_grid_import_export.admin.process.show.content.sections.general.header':
+            title:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/header/title.html.twig'
+                priority: 0
+
+        'sylius_grid_import_export.admin.process.show.content.sections.general.table':
+            uuid:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/uuid.html.twig'
+                priority: 500
+            type:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/type.html.twig'
+                priority: 400
+            resource:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/resource.html.twig'
+                priority: 300
+            format:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/format.html.twig'
+                priority: 200
+            status:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/status.html.twig'
+                priority: 150
+            output:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/output.html.twig'
+                priority: 100
+            timestamps:
+                template: '@SyliusGridImportExport/admin/import_export/show/content/sections/general/timestamps.html.twig'
+                priority: 0

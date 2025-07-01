@@ -1,0 +1,10 @@
+{%
+    set viewOptions = {
+    failed: { color: 'bg-red-lt' },
+    success: { color: 'bg-green-lt' },
+}
+%}
+
+<span class="badge {{ viewOptions[data]['color'] }}">
+    {{ data }}
+</span>
