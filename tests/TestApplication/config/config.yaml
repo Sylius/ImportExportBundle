@@ -2,6 +2,9 @@ imports:
     - { resource: "@SyliusGridImportExportBundle/config/config.yaml" }
     - { resource: "services_test.php" }
 
+parameters:
+    sylius_grid_import_export.export_files_directory: '%kernel.project_dir%/../../../etc/export'
+
 twig:
     paths:
         '%kernel.project_dir%/../../../tests/TestApplication/templates': ~

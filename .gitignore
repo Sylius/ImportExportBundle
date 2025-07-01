@@ -5,6 +5,8 @@
 
 /etc/build/*
 !/etc/build/.gitignore
+/etc/export/*
+!/etc/export/.gitignore
 
 /tests/TestApplication/.env.local
 /tests/TestApplication/.env.*.local
