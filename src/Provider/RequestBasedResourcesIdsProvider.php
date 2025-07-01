@@ -65,7 +65,7 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
 
         $ids = [];
         foreach ($paginator->autoPagingIterator() as $item) {
-            $ids[] = $item->getId();
+            $ids[] = (string) $item->getId();
         }
 
         return $ids;

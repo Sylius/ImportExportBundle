@@ -8,6 +8,20 @@
     <parameters>
         <parameter key="sylius_import_export.export.form_class">Sylius\GridImportExport\Form\Type\ExportResourceType</parameter>
         <parameter key="sylius_grid_import_export.export_files_directory">%kernel.project_dir%/etc/export</parameter>
+
+        <!--        Temp parameters, should go through config tree -->
+        <parameter key="sylius_import_export.grid.export.allowed_sections" type="collection">
+            <parameter>admin</parameter>
+        </parameter>
+        <parameter key="sylius_import_export.grid.export.allowed_resources" type="collection">
+            <parameter>sylius.product</parameter>
+            <parameter>sylius.payment</parameter>
+            <parameter>sylius.shipment</parameter>
+            <parameter>sylius.order</parameter>
+            <parameter>sylius.customer</parameter>
+            <parameter>sylius_grid_import_export.process</parameter>
+        </parameter>
+        <!--        -->
     </parameters>
 
     <services>
@@ -89,7 +103,12 @@
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius_import_export.listener.grid.admin.export_action" class="Sylius\GridImportExport\Grid\Listener\ExportActionAdminGridListener">
+        <service id="sylius_import_export.listener.grid.admin.export_action" class="Sylius\B2BKit\Grid\Listener\ExportActionAdminGridListener">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="sylius.resource_registry" />
+            <argument>%sylius_import_export.grid.export.allowed_sections%</argument>
+            <argument>%sylius_import_export.grid.export.allowed_resources%</argument>
+
             <tag name="kernel.event_listener" event="sylius.grid.common" method="addExportMainAction" />
         </service>
 
