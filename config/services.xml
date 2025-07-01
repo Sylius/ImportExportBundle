@@ -54,6 +54,13 @@
             <tag name="controller.service_arguments" />
         </service>
 
+        <service id="sylius_import_export.controller.download_export_action" class="Sylius\GridImportExport\Controller\DownloadExportAction" public="true">
+            <argument type="service" id="sylius_grid_import_export.repository.process" />
+            <argument type="string">%sylius_grid_import_export.export_files_directory%</argument>
+
+            <tag name="controller.service_arguments" />
+        </service>
+
         <service id="sylius_import_export.custom_factory.process" class="Sylius\GridImportExport\Factory\ProcessFactory" decorates="sylius_grid_import_export.factory.process">
             <argument type="service" id=".inner" />
         </service>

@@ -1,0 +1,5 @@
+{% if data.status == 'success' and data.output %}
+    <a href="{{ path(options.link.route, options.link.parameters) }}" class="btn btn-icon" data-bs-toggle="tooltip" data-bs-title="{{ action.label|trans }}" aria-label="{{ action.label|trans }}">
+        {{ ux_icon(action.icon|default('tabler:download')) }}
+    </a>
+{% endif %}

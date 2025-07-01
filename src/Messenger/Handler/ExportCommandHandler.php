@@ -58,7 +58,10 @@ class ExportCommandHandler
             $process->setOutput($outputPath);
         } catch (ExportFailedException $e) {
             $process->setStatus('failed');
-            $process->setOutput($e->getTraceAsString());
+            $process->setErrorMessage($e->getMessage());
+        } catch (\Throwable $e) {
+            $process->setStatus('failed');
+            $process->setErrorMessage($e->getMessage());
         }
     }
 }

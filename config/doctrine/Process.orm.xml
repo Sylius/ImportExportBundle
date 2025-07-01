@@ -13,6 +13,7 @@
         <field name="status" column="status" type="string" />
         <field name="resource" column="resource" type="string" />
         <field name="output" column="output" type="text" nullable="true" />
+        <field name="errorMessage" column="error_message" type="text" nullable="true" />
         <field name="format" column="format" type="string" />
         <field name="resourceIds" column="resource_ids" type="json" nullable="true" />
         <field name="createdAt" column="created_at" type="datetime">

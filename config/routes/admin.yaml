@@ -28,3 +28,12 @@ sylius_grid_import_export_admin_process_show:
             permission: true
             vars:
                 hook_prefix: 'sylius_grid_import_export.admin.process'
+
+sylius_grid_import_export_admin_process_download:
+    path: /import-export/processes/{uuid}/download
+    methods: [ GET ]
+    defaults:
+        _controller: sylius_import_export.controller.download_export_action
+        _sylius:
+            section: admin
+            permission: true

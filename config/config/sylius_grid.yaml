@@ -2,6 +2,7 @@ sylius_grid:
     templates:
         action:
             export: '@SyliusGridImportExport\admin\import_export\grid\action\export.html.twig'
+            download: '@SyliusGridImportExport\admin\import_export\grid\action\download.html.twig'
         bulk_action:
             export: '@SyliusGridImportExport\admin\import_export\grid\bulk_action\export.html.twig'
 
@@ -32,6 +33,14 @@ sylius_grid:
                         template: '@SyliusGridImportExport\admin\import_export\grid\field\status.html.twig'
             actions:
                 item:
+                    download:
+                        type: download
+                        label: sylius_grid_import_export.ui.download
+                        options:
+                            link:
+                                route: sylius_grid_import_export_admin_process_download
+                                parameters:
+                                    uuid: resource.uuid
                     show:
                         type: show
                     delete:

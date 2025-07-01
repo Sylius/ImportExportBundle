@@ -49,4 +49,8 @@ interface ProcessInterface extends ResourceInterface, TimestampableInterface
     public function getOutput(): string;
 
     public function setOutput(string $output): void;
+
+    public function getErrorMessage(): ?string;
+
+    public function setErrorMessage(?string $errorMessage): void;
 }

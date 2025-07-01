@@ -12,3 +12,7 @@ sylius_grid_import_export:
         process: "Process"
         output_file: "Output File"
         no_output: "No Output"
+        file_not_ready: "File not ready for download"
+        export_failed: "Export failed"
+        processing: "Processing..."
+        download: "Download export file"

@@ -1,9 +1,0 @@
-{% set data = hookable_metadata.context.data %}
-
-<tr>
-    <th class="w-50">{{ 'sylius.ui.name'|trans }}</th>
-    <td>
-        {{ data.firstName|default('sylius_organization_plugin.ui.not_defined'|trans) }}
-        {{ data.lastName|default('') }}
-    </td>
-</tr>

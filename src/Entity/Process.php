@@ -33,6 +33,8 @@ class Process implements ProcessInterface
 
     protected string $output;
 
+    protected ?string $errorMessage = null;
+
     public function getId(): string
     {
         return $this->uuid;
@@ -106,5 +108,15 @@ class Process implements ProcessInterface
     public function setOutput(string $output): void
     {
         $this->output = $output;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    public function setErrorMessage(?string $errorMessage): void
+    {
+        $this->errorMessage = $errorMessage;
     }
 }
