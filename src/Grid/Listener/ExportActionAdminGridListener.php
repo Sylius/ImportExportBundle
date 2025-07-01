@@ -13,20 +13,24 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Grid\Listener;
 
+use Sylius\Bundle\GridBundle\Builder\ActionGroup\ActionGroupInterface;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\Driver as ORMDriver;
 use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\ActionGroup;
+use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Event\GridDefinitionConverterEvent;
 use Sylius\GridImportExport\Grid\Checker\ExportableCheckerInterface;
 
 final readonly class ExportActionAdminGridListener
 {
+    private const EXPORT_ACTION_NAME = 'export';
+
     public function __construct(
         private ExportableCheckerInterface $exportableChecker,
     ) {
     }
 
-    public function addExportMainAction(GridDefinitionConverterEvent $event): void
+    public function addExportActions(GridDefinitionConverterEvent $event): void
     {
         $grid = $event->getGrid();
         if (ORMDriver::NAME !== $grid->getDriver()) {
@@ -37,16 +41,22 @@ final readonly class ExportActionAdminGridListener
             return;
         }
 
-        if (!$grid->hasActionGroup('main')) {
-            $grid->addActionGroup(ActionGroup::named('main'));
+        $this->addInActionGroup($grid, ActionGroupInterface::MAIN_GROUP);
+        $this->addInActionGroup($grid, ActionGroupInterface::BULK_GROUP);
+    }
+
+    private function addInActionGroup(Grid $grid, string $groupName): void
+    {
+        if (!$grid->hasActionGroup($groupName)) {
+            $grid->addActionGroup(ActionGroup::named($groupName));
         }
 
-        $actionGroup = $grid->getActionGroup('main');
-        if ($actionGroup->hasAction('export')) {
+        $actionGroup = $grid->getActionGroup($groupName);
+        if ($actionGroup->hasAction(self::EXPORT_ACTION_NAME)) {
             return;
         }
 
-        $action = Action::fromNameAndType('export', 'export');
+        $action = Action::fromNameAndType(self::EXPORT_ACTION_NAME, self::EXPORT_ACTION_NAME);
 
         $actionGroup->addAction($action);
     }

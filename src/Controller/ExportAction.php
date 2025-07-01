@@ -44,12 +44,7 @@ final class ExportAction
         $format = $data['format'];
         $resourceClass = $data['resourceClass'];
 
-        $metadata = $this->metadataRegistry->getByClass($resourceClass);
-
-        $resourceIds = $this->resourcesIdsProvider->getResourceIds(
-            metadata: $metadata,
-            context: ['request' => $request, 'currentPage' => $data['currentPage'] ?? false],
-        );
+        $resourceIds = $this->resolveResourceIds($request, $data);
 
         $this->commandBus->dispatch(new ExportCommand(
             resource: $resourceClass,
@@ -58,5 +53,19 @@ final class ExportAction
         ));
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');
+    }
+
+    private function resolveResourceIds(Request $request, array $formData): array
+    {
+        if (isset($formData['ids']) && [] !== $formData['ids']) {
+            return $formData['ids'];
+        }
+
+        $metadata = $this->metadataRegistry->getByClass($formData['resourceClass']);
+
+        return $this->resourcesIdsProvider->getResourceIds(
+            metadata: $metadata,
+            context: ['request' => $request],
+        );
     }
 }

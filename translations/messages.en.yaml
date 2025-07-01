@@ -3,7 +3,6 @@ sylius_grid_import_export:
         form:
             export: Export
             format: Format
-            current_page: Current page
     ui:
         export: "Export"
         import_export: "Import / export"

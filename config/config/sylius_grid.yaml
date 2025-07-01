@@ -2,6 +2,9 @@ sylius_grid:
     templates:
         action:
             export: '@SyliusGridImportExport\admin\import_export\grid\action\export.html.twig'
+        bulk_action:
+            export: '@SyliusGridImportExport\admin\import_export\grid\bulk_action\export.html.twig'
+
     grids:
         sylius_grid_import_export_admin_process:
             driver:

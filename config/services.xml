@@ -76,7 +76,18 @@
             <tag
                 name="sylius.twig_component"
                 key="sylius_import_export:admin:export"
-                template="@SyliusGridImportExport\admin\import_export\component\export_form.html.twig"
+                template="@SyliusGridImportExport\admin\import_export\component\main_export_form.html.twig"
+            />
+        </service>
+
+        <service id="sylius_import_export.admin.twig.component.bulk_export_resource" class="Sylius\GridImportExport\Twig\Component\ExportResourceFormComponent">
+            <argument type="service" id="form.factory" />
+            <argument>%sylius_import_export.export.form_class%</argument>
+
+            <tag
+                name="sylius.twig_component"
+                key="sylius_import_export:admin:bulk_export"
+                template="@SyliusGridImportExport\admin\import_export\component\bulk_export_form.html.twig"
             />
         </service>
 
@@ -110,10 +121,10 @@
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius_import_export.listener.grid.admin.export_action" class="Sylius\Grid\Listener\ExportActionAdminGridListener">
+        <service id="sylius_import_export.grid.listener.admin.export_action" class="Sylius\GridImportExport\Grid\Listener\ExportActionAdminGridListener">
             <argument type="service" id="sylius_import_export.grid.checker.exportable" />
 
-            <tag name="kernel.event_listener" event="sylius.grid.common" method="addExportMainAction" />
+            <tag name="kernel.event_listener" event="sylius.grid.common" method="addExportActions" />
         </service>
 
         <service id="sylius_grid_import_export.menu.admin_listener" class="Sylius\GridImportExport\Menu\AdminImportExportMenuListener">
