@@ -25,7 +25,7 @@ sylius_grid:
                         template: '@SyliusGridImportExport\admin\import_export\grid\field\type.html.twig'
                 resource:
                     type: string
-                    label: sylius.ui.resource
+                    label: sylius_grid_import_export.ui.resource
                 status:
                     type: twig
                     label: sylius.ui.status

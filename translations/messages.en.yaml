@@ -16,3 +16,4 @@ sylius_grid_import_export:
         export_failed: "Export failed"
         processing: "Processing..."
         download: "Download export file"
+    export_started: "Export started and will be processed in the background. You can check the status in the Import/Export processes list."

@@ -22,6 +22,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class ExportAction
@@ -68,6 +69,10 @@ final class ExportAction
             resourceIds: $resourceIds,
             parameters: $parameters,
         ));
+
+        /** @var Session $session */
+        $session = $request->getSession();
+        $session->getFlashBag()->add('success', 'sylius_grid_import_export.export_started');
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');
     }

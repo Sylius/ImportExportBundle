@@ -27,7 +27,6 @@ final class DownloadExportAction
      */
     public function __construct(
         private RepositoryInterface $processRepository,
-        private string $exportDirectory,
     ) {
     }
 
@@ -53,11 +52,11 @@ final class DownloadExportAction
         }
 
         $response = new BinaryFileResponse($filePath);
-        
+
         // Sanitize filename by removing invalid characters
         $sanitizedResource = str_replace(['/', '\\', '.'], '_', $process->getResource());
         $sanitizedUuid = str_replace(['/', '\\'], '_', $process->getUuid());
-        
+
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             sprintf('export_%s_%s.%s', $sanitizedResource, $sanitizedUuid, $process->getFormat()),
