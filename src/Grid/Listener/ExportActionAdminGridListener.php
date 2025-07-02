@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Grid\Listener;
 
+use Sylius\Bundle\CoreBundle\SectionResolver\SectionProviderInterface;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\ActionGroupInterface;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\Driver as ORMDriver;
 use Sylius\Component\Grid\Definition\Action;
@@ -20,12 +21,15 @@ use Sylius\Component\Grid\Definition\ActionGroup;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Event\GridDefinitionConverterEvent;
 use Sylius\GridImportExport\Grid\Checker\ExportableCheckerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class ExportActionAdminGridListener
 {
     private const EXPORT_ACTION_NAME = 'export';
 
     public function __construct(
+        private RequestStack $requestStack,
+        private ?SectionProviderInterface $sectionProvider,
         private ExportableCheckerInterface $exportableChecker,
     ) {
     }
@@ -37,10 +41,14 @@ final readonly class ExportActionAdminGridListener
             return;
         }
 
-        if (!$this->exportableChecker->canBeExported($grid)) {
+        if (
+            !$this->exportableChecker->canBeExported($grid, $this->sectionProvider?->getSection()) &&
+            !$this->exportableChecker->canBeExported($grid, $this->getRouteSection())
+        ) {
             return;
         }
 
+        // TODO: Introduce config for each case, default both //
         $this->addInActionGroup($grid, ActionGroupInterface::MAIN_GROUP);
         $this->addInActionGroup($grid, ActionGroupInterface::BULK_GROUP);
     }
@@ -59,5 +67,15 @@ final readonly class ExportActionAdminGridListener
         $action = Action::fromNameAndType(self::EXPORT_ACTION_NAME, self::EXPORT_ACTION_NAME);
 
         $actionGroup->addAction($action);
+    }
+
+    private function getRouteSection(): ?string
+    {
+        $request = $this->requestStack->getMainRequest();
+        if (null === $request) {
+            return null;
+        }
+
+        return $request->attributes->all()['_sylius']['section'] ?? null;
     }
 }

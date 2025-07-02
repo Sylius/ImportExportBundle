@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider;
+namespace Sylius\GridImportExport\Provider\ResourceData;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -19,8 +19,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\Resource\Metadata\MetadataInterface;
 
-final class DefaultResourceDataProvider implements ResourceDataProviderInterface
+final class DbalResourceDataProvider implements ResourceDataProviderInterface
 {
     /** @var array<class-string, array<string, string>> */
     private static array $resourceFieldsMetadata = [];
@@ -30,10 +31,10 @@ final class DefaultResourceDataProvider implements ResourceDataProviderInterface
     ) {
     }
 
-    public function getData(string $resource, array $resourceIds): array
+    public function getData(MetadataInterface $resource, string $gridCode, array $resourceIds, array $parameters): array
     {
-        $metadata = $this->getResourceMetadata($resource);
-        $scalarFieldsMetadata = $this->getResourceScalarFieldsData($metadata, $resource);
+        $metadata = $this->getResourceMetadata($resource->getClass('model'));
+        $scalarFieldsMetadata = $this->getResourceScalarFieldsData($metadata, $resource->getClass('model'));
         if (empty($scalarFieldsMetadata)) {
             return [];
         }

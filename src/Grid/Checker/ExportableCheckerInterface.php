@@ -17,5 +17,5 @@ use Sylius\Component\Grid\Definition\Grid;
 
 interface ExportableCheckerInterface
 {
-    public function canBeExported(Grid $grid): bool;
+    public function canBeExported(Grid $grid, object|string|null $section): bool;
 }

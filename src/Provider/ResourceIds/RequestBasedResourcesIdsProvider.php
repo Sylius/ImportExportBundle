@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider;
+namespace Sylius\GridImportExport\Provider\ResourceIds;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Pagerfanta;
@@ -32,13 +32,19 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
     ) {
     }
 
+    /** @param array<mixed>|array{request: Request} $context */
     public function getResourceIds(MetadataInterface $metadata, array $context = []): array
     {
-        if (!isset($context['request']) || !($request = $context['request']) instanceof Request) {
+        if (!$this->supports($metadata, $context)) {
             throw new ProviderException('Request is missing from the context.');
         }
 
-        return $this->doGetResourceIds($metadata, $request);
+        return $this->doGetResourceIds($metadata, $context['request']);
+    }
+
+    public function supports(MetadataInterface $metadata, array $context = []): bool
+    {
+        return isset($context['request']) && $context['request'] instanceof Request;
     }
 
     private function doGetResourceIds(MetadataInterface $metadata, Request $request): array

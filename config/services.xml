@@ -5,68 +5,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
-    <parameters>
-        <parameter key="sylius_import_export.export.form_class">Sylius\GridImportExport\Form\Type\ExportResourceType</parameter>
-        <parameter key="sylius_grid_import_export.export_files_directory">%kernel.project_dir%/etc/export</parameter>
-
-        <!--        Temp parameters, should go through config tree -->
-        <parameter key="sylius_import_export.grid.export.allowed_sections" type="collection">
-            <parameter>admin</parameter>
-        </parameter>
-        <parameter key="sylius_import_export.grid.export.allowed_resources" type="collection">
-            <parameter>sylius.product</parameter>
-            <parameter>sylius.payment</parameter>
-            <parameter>sylius.shipment</parameter>
-            <parameter>sylius.order</parameter>
-            <parameter>sylius.customer</parameter>
-            <parameter>sylius_grid_import_export.process</parameter>
-        </parameter>
-        <!--        -->
-    </parameters>
+    <imports>
+        <import resource="services/**.xml" />
+    </imports>
 
     <services>
-        <service id="sylius_grid_import_export.exporter.csv" class="Sylius\GridImportExport\Exporter\CsvExporter">
-            <argument type="string">%sylius_grid_import_export.export_files_directory%</argument>
-            <tag name="sylius.grid_import_export.exporter" format="csv" />
-        </service>
-
-        <service id="sylius_grid_import_export.exporter.json" class="Sylius\GridImportExport\Exporter\JsonExporter">
-            <argument type="string">%sylius_grid_import_export.export_files_directory%</argument>
-            <tag name="sylius.grid_import_export.exporter" format="json" />
-        </service>
-
-        <service id="sylius_grid_import_export.exporter_resolver" class="Sylius\GridImportExport\Resolver\ExporterResolver">
-            <argument type="tagged_locator" tag="sylius.grid_import_export.exporter" index-by="format" />
-        </service>
-        <service id="Sylius\GridImportExport\Resolver\ExporterResolverInterface" alias="sylius_grid_import_export.exporter_resolver" />
-
-        <service id="sylius_import_export.provider.resource_data.default" class="Sylius\GridImportExport\Provider\DefaultResourceDataProvider">
-            <argument type="service" id="doctrine.orm.entity_manager" />
-        </service>
-
-        <service id="sylius_import_export.provider.resources_ids.request_based" class="Sylius\GridImportExport\Provider\RequestBasedResourcesIdsProvider">
-            <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
-            <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
-        </service>
-
         <service id="sylius_import_export.messenger.command_handler.export" class="Sylius\GridImportExport\Messenger\Handler\ExportCommandHandler">
+            <argument type="service" id="sylius.resource_registry" />
             <argument type="service" id="sylius_import_export.custom_factory.process" />
             <argument type="service" id="sylius_grid_import_export.repository.process" />
-            <argument type="service" id="sylius_import_export.provider.resource_data.default" />
+            <argument type="service" id="sylius_import_export.registry.resource_data_provider" />
             <argument type="service" id="sylius_grid_import_export.exporter_resolver" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
-        </service>
-
-        <service id="sylius_import_export.form.choice_loader.export_formats" class="Sylius\GridImportExport\Form\ChoiceLoader\ExportFormatsChoiceLoader">
-            <argument type="tagged_iterator" tag="sylius.grid_import_export.exporter" index-by="format" />
-        </service>
-
-        <service id="sylius_import_export.form.type.export" class="Sylius\GridImportExport\Form\Type\ExportResourceType">
-            <argument type="service" id="sylius_import_export.form.choice_loader.export_formats" />
-
-            <tag name="form.type" />
         </service>
 
         <service id="sylius_import_export.twig.component.export_resource" class="Sylius\GridImportExport\Twig\Component\ExportResourceFormComponent">
@@ -93,7 +44,9 @@
 
         <service id="sylius_import_export.controller.export_action" class="Sylius\GridImportExport\Controller\ExportAction" public="true">
             <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius_import_export.provider.resources_ids.request_based" />
+            <argument type="service" id="sylius.grid.chain_provider" />
+            <argument type="service" id="sylius.resource_controller.parameters_parser" />
+            <argument type="service" id="sylius_import_export.provider.resources_ids" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="sylius.command_bus" />
             <argument>%sylius_import_export.export.form_class%</argument>
@@ -103,28 +56,6 @@
 
         <service id="sylius_import_export.custom_factory.process" class="Sylius\GridImportExport\Factory\ProcessFactory" decorates="sylius_grid_import_export.factory.process">
             <argument type="service" id=".inner" />
-        </service>
-
-        <service id="sylius_import_export.grid.checker.exportable" class="Sylius\GridImportExport\Grid\Checker\ExportableChecker">
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="sylius.resource_registry" />
-            <argument>%sylius_import_export.grid.export.allowed_sections%</argument>
-            <argument>%sylius_import_export.grid.export.allowed_resources%</argument>
-        </service>
-
-        <service
-            id="sylius_import_export.grid.array_to_definition_converter.common_event_dispatching"
-            class="Sylius\GridImportExport\Grid\Definition\CommonEventDispatchingArrayToDefinitionConverter"
-            decorates="sylius.grid.array_to_definition_converter"
-        >
-            <argument type="service" id="event_dispatcher" />
-            <argument type="service" id=".inner" />
-        </service>
-
-        <service id="sylius_import_export.grid.listener.admin.export_action" class="Sylius\GridImportExport\Grid\Listener\ExportActionAdminGridListener">
-            <argument type="service" id="sylius_import_export.grid.checker.exportable" />
-
-            <tag name="kernel.event_listener" event="sylius.grid.common" method="addExportActions" />
         </service>
 
         <service id="sylius_grid_import_export.menu.admin_listener" class="Sylius\GridImportExport\Menu\AdminImportExportMenuListener">

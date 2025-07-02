@@ -22,7 +22,29 @@ final class SyliusGridImportExportExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = $this->processConfiguration(new Configuration(), $configs);
+
+        $this->processExportConfig($container, $configuration);
+
         $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config/'));
         $loader->load('services.xml');
+    }
+
+    private function processExportConfig(ContainerBuilder $container, array &$config): void
+    {
+        $defaultProvider = $config['export']['default_provider'];
+        $defaultSection = $config['export']['default_section'];
+
+        foreach ($config['export']['resources'] as $name => &$resource) {
+            if (null === $resource['provider']) {
+                $resource['provider'] = $defaultProvider;
+            }
+            if ([] === $resource['sections']) {
+                $resource['sections'][] = $defaultSection;
+            }
+        }
+
+        $container->setParameter('sylius_import_export.export.default_provider', $defaultProvider);
+        $container->setParameter('sylius_import_export.export.resources', $config['export']['resources']);
     }
 }

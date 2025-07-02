@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Controller;
 
+use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
+use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\GridImportExport\Messenger\Command\ExportCommand;
-use Sylius\GridImportExport\Provider\ResourcesIdsProviderInterface;
+use Sylius\GridImportExport\Provider\ResourceIds\ResourcesIdsProviderInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,6 +28,8 @@ final class ExportAction
 {
     public function __construct(
         private RegistryInterface $metadataRegistry,
+        private GridProviderInterface $gridProvider,
+        private ParametersParserInterface $parametersParser,
         private ResourcesIdsProviderInterface $resourcesIdsProvider,
         private FormFactoryInterface $formFactory,
         private MessageBusInterface $commandBus,
@@ -44,28 +48,27 @@ final class ExportAction
         $format = $data['format'];
         $resourceClass = $data['resourceClass'];
 
-        $resourceIds = $this->resolveResourceIds($request, $data);
+        $metadata = $this->metadataRegistry->getByClass($resourceClass);
+        $gridConfiguration = $this->gridProvider->get($grid);
+
+        $resourceIds = $this->resourcesIdsProvider->getResourceIds(
+            metadata: $metadata,
+            context: ['request' => $request, 'ids' => $data['ids'] ?? []],
+        );
+
+        $parameters = $this->parametersParser->parseRequestValues(
+            $gridConfiguration->getDriverConfiguration(),
+            $request,
+        );
 
         $this->commandBus->dispatch(new ExportCommand(
-            resource: $resourceClass,
+            resource: $metadata->getAlias(),
+            grid: $grid,
             format: $format,
             resourceIds: $resourceIds,
+            parameters: $parameters,
         ));
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');
-    }
-
-    private function resolveResourceIds(Request $request, array $formData): array
-    {
-        if (isset($formData['ids']) && [] !== $formData['ids']) {
-            return $formData['ids'];
-        }
-
-        $metadata = $this->metadataRegistry->getByClass($formData['resourceClass']);
-
-        return $this->resourcesIdsProvider->getResourceIds(
-            metadata: $metadata,
-            context: ['request' => $request],
-        );
     }
 }

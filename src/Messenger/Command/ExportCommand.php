@@ -15,11 +15,12 @@ namespace Sylius\GridImportExport\Messenger\Command;
 
 class ExportCommand
 {
-    /** @param class-string $resource */
     public function __construct(
         public string $resource,
+        public string $grid,
         public string $format,
         public array $resourceIds,
+        public array $parameters,
     ) {
     }
 }

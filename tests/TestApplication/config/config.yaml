@@ -8,3 +8,18 @@ parameters:
 twig:
     paths:
         '%kernel.project_dir%/../../../tests/TestApplication/templates': ~
+
+sylius_grid_import_export:
+    export:
+        default_provider: 'sylius_import_export.provider.resource_data.grid'
+        default_section: 'admin'
+        resources:
+            sylius.order:
+                sections:
+                    - 'Sylius\Bundle\AdminBundle\SectionResolver\AdminSection'
+            sylius.customer:
+                provider: 'sylius_import_export.provider.resource_data.dbal'
+            sylius.promotion: ~
+            sylius.product: ~
+            sylius.shipment: ~
+            sylius_grid_import_export.process: ~

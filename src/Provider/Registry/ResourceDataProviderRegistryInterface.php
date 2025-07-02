@@ -11,11 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider;
+namespace Sylius\GridImportExport\Provider\Registry;
 
+use Sylius\GridImportExport\Provider\ResourceData\ResourceDataProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
-interface ResourcesIdsProviderInterface
+interface ResourceDataProviderRegistryInterface
 {
-    public function getResourceIds(MetadataInterface $metadata, array $context = []): array;
+    public function getProvider(MetadataInterface $resourceMetadata): ResourceDataProviderInterface;
 }

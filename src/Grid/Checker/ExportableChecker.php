@@ -15,46 +15,40 @@ namespace Sylius\GridImportExport\Grid\Checker;
 
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Resource\Metadata\RegistryInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
-final class ExportableChecker implements ExportableCheckerInterface
+final readonly class ExportableChecker implements ExportableCheckerInterface
 {
-    /**
-     * @param array<array-key, string> $allowedSections
-     * @param array<array-key, string> $allowedResources
-     */
+    /** @param array<string, array{provider: string, sections: string[]}> $exportResourcesConfig */
     public function __construct(
-        private RequestStack $requestStack,
         private RegistryInterface $resourceRegistry,
-        private array $allowedSections,
-        private array $allowedResources,
+        private array $exportResourcesConfig,
     ) {
     }
 
-    public function canBeExported(Grid $grid): bool
+    public function canBeExported(Grid $grid, object|string|null $section): bool
     {
         $resourceClass = $grid->getDriverConfiguration()['class'] ?? null;
         if (null === $resourceClass) {
             return false;
         }
 
-        $request = $this->requestStack->getMainRequest();
-        if (!$request instanceof Request) {
+        if (null === $section) {
+            return true;
+        }
+
+        $resourceAlias = $this->resourceRegistry->getByClass($resourceClass)->getAlias();
+
+        $resourceConfig = $this->exportResourcesConfig[$resourceAlias] ?? false;
+        if (false === $resourceConfig) {
             return false;
         }
 
-        if (!$request->attributes->has('_sylius')) {
-            return false;
+        foreach ($resourceConfig['sections'] as $configSection) {
+            if (is_a($section, $configSection, true) || $section === $configSection) {
+                return true;
+            }
         }
 
-        $syliusAttributes = $request->attributes->all()['_sylius'];
-        if (!in_array($syliusAttributes['section'] ?? null, $this->allowedSections)) {
-            return false;
-        }
-
-        $resourceMetadata = $this->resourceRegistry->getByClass($resourceClass);
-
-        return in_array($resourceMetadata->getAlias(), $this->allowedResources);
+        return false;
     }
 }

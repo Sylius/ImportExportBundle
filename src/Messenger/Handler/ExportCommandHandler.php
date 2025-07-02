@@ -17,9 +17,10 @@ use Sylius\GridImportExport\Entity\ProcessInterface;
 use Sylius\GridImportExport\Exception\ExportFailedException;
 use Sylius\GridImportExport\Factory\ProcessFactoryInterface;
 use Sylius\GridImportExport\Messenger\Command\ExportCommand;
-use Sylius\GridImportExport\Provider\ResourceDataProviderInterface;
+use Sylius\GridImportExport\Provider\Registry\ResourceDataProviderRegistryInterface;
 use Sylius\GridImportExport\Resolver\ExporterResolverInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 
 class ExportCommandHandler
 {
@@ -27,9 +28,10 @@ class ExportCommandHandler
      * @param RepositoryInterface<ProcessInterface> $processRepository
      */
     public function __construct(
+        public RegistryInterface $metadataRegistry,
         public ProcessFactoryInterface $processFactory,
         public RepositoryInterface $processRepository,
-        public ResourceDataProviderInterface $resourceDataProvider,
+        public ResourceDataProviderRegistryInterface $dataProviderRegistry,
         public ExporterResolverInterface $exporterResolver,
     ) {
     }
@@ -42,10 +44,12 @@ class ExportCommandHandler
 
         $this->processRepository->add($process);
 
-        $data = $this->resourceDataProvider->getData(
-            $command->resource,
-            $command->resourceIds,
-        );
+        $resourceMetadata = $this->metadataRegistry->get($command->resource);
+
+        $data = $this->dataProviderRegistry
+            ->getProvider($resourceMetadata)
+            ->getData($resourceMetadata, $command->grid, $command->resourceIds, $command->parameters)
+        ;
 
         try {
             $outputPath = $resolver->export($data);

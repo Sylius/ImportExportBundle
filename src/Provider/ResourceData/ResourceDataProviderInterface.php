@@ -11,19 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider;
+namespace Sylius\GridImportExport\Provider\ResourceData;
 
 use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\Resource\Metadata\MetadataInterface;
 
 interface ResourceDataProviderInterface
 {
     /**
-     * @param class-string $resource
      * @param mixed[] $resourceIds
+     * @param mixed[] $parameters
      *
      * @return array<array<string, mixed>>
      *
      * @throws ProviderException
      */
-    public function getData(string $resource, array $resourceIds): array;
+    public function getData(MetadataInterface $resource, string $gridCode, array $resourceIds, array $parameters): array;
 }

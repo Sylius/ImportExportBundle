@@ -7,3 +7,6 @@ parameters:
     ignoreErrors:
         - identifier: missingType.generics
         - identifier: missingType.iterableValue
+
+    excludePaths:
+        - '%currentWorkingDirectory%/src/DependencyInjection/Configuration.php'
