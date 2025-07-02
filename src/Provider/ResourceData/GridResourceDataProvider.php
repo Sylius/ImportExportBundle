@@ -19,11 +19,13 @@ use Sylius\Component\Grid\Data\DataSourceProviderInterface;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
 use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class GridResourceDataProvider implements ResourceDataProviderInterface
 {
     public function __construct(
+        private ResourceIdentifierProviderInterface $identifierProvider,
         private GridProviderInterface $gridProvider,
         private DataSourceProviderInterface $gridDataSourceProvider,
     ) {
@@ -31,6 +33,8 @@ final class GridResourceDataProvider implements ResourceDataProviderInterface
 
     public function getData(MetadataInterface $resource, string $gridCode, array $resourceIds, array $parameters): array
     {
+        $identifier = $this->identifierProvider->getIdentifierField($resource);
+
         $grid = $this->gridProvider->get($gridCode);
         if (ORMDriver::NAME !== $grid->getDriver()) {
             throw new ProviderException(sprintf(
@@ -45,7 +49,7 @@ final class GridResourceDataProvider implements ResourceDataProviderInterface
 
         /** @var ORMDataSource $dataSource */
         $dataSource = $this->gridDataSourceProvider->getDataSource($grid, new Parameters($parameters));
-        $dataSource->restrict($dataSource->getExpressionBuilder()->in('id', $resourceIds));
+        $dataSource->restrict($dataSource->getExpressionBuilder()->in($identifier, $resourceIds));
 
         return $dataSource->getQueryBuilder()->getQuery()->getArrayResult();
     }

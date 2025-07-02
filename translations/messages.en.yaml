@@ -19,4 +19,3 @@ sylius_grid_import_export:
         type:
             export: "Export"
             import: "Import"
-        export_started: "Export started and will be processed in the background. You can check the status in the Import/Export processes list."

@@ -14,11 +14,16 @@ declare(strict_types=1);
 namespace Sylius\GridImportExport\Provider\ResourceIds;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Pagerfanta;
+use Sylius\Bundle\GridBundle\Doctrine\ORM\DataSource as ORMDataSource;
+use Sylius\Bundle\GridBundle\Doctrine\ORM\Driver as ORMDriver;
+use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
+use Sylius\Component\Grid\Data\DataSourceProviderInterface;
+use Sylius\Component\Grid\Parameters;
 use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +33,9 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
     public function __construct(
         private RequestConfigurationFactoryInterface $requestConfigurationFactory,
         private ResourcesCollectionProviderInterface $resourcesCollectionProvider,
+        private DataSourceProviderInterface $gridDataSourceProvider,
+        private ParametersParserInterface $parametersParser,
+        private ResourceIdentifierProviderInterface $identifierProvider,
         private EntityManagerInterface $entityManager,
     ) {
     }
@@ -49,6 +57,8 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
 
     private function doGetResourceIds(MetadataInterface $metadata, Request $request): array
     {
+        $resourceIdentifier = $this->identifierProvider->getIdentifierField($metadata);
+
         $resourceClass = $metadata->getClass('model');
         /** @var RepositoryInterface $repository */
         $repository = $this->entityManager->getRepository($resourceClass);
@@ -58,22 +68,33 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
         if (!$resources instanceof ResourceGridView) {
             throw new \RuntimeException(sprintf('Expected ResourceGridView, got %s', get_class($resources)));
         }
-
-        // TODO: We might need a custom Grid DataSource to skip pagerfanta creation and unnecessary iteration
-        //       Apply the filters how it's done normally and return only ids with a quick select
-        $paginator = $resources->getData();
-        if (!$paginator instanceof Pagerfanta) {
-            throw new \RuntimeException(sprintf(
-                'Only pagerfanta data is supported, got %s',
-                is_object($paginator) ? get_class($paginator) : gettype($paginator),
+        // TODO: Extract actual grid based ids resolving per dbal and orm //
+        //       Maybe also move this validation to a compiler pass instead of having it done in runtime //
+        $grid = $resources->getDefinition();
+        if (ORMDriver::NAME !== $grid->getDriver()) {
+            throw new ProviderException(sprintf(
+                'Request based resource ids provider is only usage in grids with "%s" driver',
+                ORMDriver::NAME,
             ));
         }
 
-        $ids = [];
-        foreach ($paginator->autoPagingIterator() as $item) {
-            $ids[] = (string) $item->getId();
-        }
+        $parameters = $this->parametersParser->parseRequestValues(
+            $grid->getDriverConfiguration(),
+            $request,
+        );
 
-        return $ids;
+        $grid->setDriverConfiguration($parameters);
+
+        /** @var ORMDataSource $dataSource */
+        $dataSource = $this->gridDataSourceProvider->getDataSource($grid, new Parameters($parameters));
+
+        $queryBuilder = $dataSource->getQueryBuilder();
+        $rootAlias = $queryBuilder->getRootAliases()[0];
+
+        return $queryBuilder
+            ->select(sprintf('%s.%s', $rootAlias, $resourceIdentifier))
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
     }
 }

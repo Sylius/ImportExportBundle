@@ -19,6 +19,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class DbalResourceDataProvider implements ResourceDataProviderInterface
@@ -27,12 +28,14 @@ final class DbalResourceDataProvider implements ResourceDataProviderInterface
     private static array $resourceFieldsMetadata = [];
 
     public function __construct(
+        private readonly ResourceIdentifierProviderInterface $identifierProvider,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
     public function getData(MetadataInterface $resource, string $gridCode, array $resourceIds, array $parameters): array
     {
+        $resourceIdentifierField = $this->identifierProvider->getIdentifierField($resource);
         $metadata = $this->getResourceMetadata($resource->getClass('model'));
         $scalarFieldsMetadata = $this->getResourceScalarFieldsData($metadata, $resource->getClass('model'));
         if (empty($scalarFieldsMetadata)) {
@@ -42,6 +45,7 @@ final class DbalResourceDataProvider implements ResourceDataProviderInterface
         return $this->fetch(
             $this->entityManager->getConnection(),
             $metadata,
+            $resourceIdentifierField,
             $resourceIds,
             $scalarFieldsMetadata,
         );
@@ -50,6 +54,7 @@ final class DbalResourceDataProvider implements ResourceDataProviderInterface
     private function fetch(
         Connection $connection,
         ClassMetadata $metadata,
+        string $resourceIdentifierField,
         array $resourceIds,
         array $scalarFieldsMetadata,
     ): array {
@@ -59,9 +64,10 @@ final class DbalResourceDataProvider implements ResourceDataProviderInterface
         }
 
         $query = sprintf(
-            'SELECT %s FROM %s o WHERE o.id IN (:ids)',
+            'SELECT %s FROM %s o WHERE o.%s IN (:ids)',
             implode(', ', $selectParts),
             $metadata->getTableName(),
+            $resourceIdentifierField,
         );
 
         try {
