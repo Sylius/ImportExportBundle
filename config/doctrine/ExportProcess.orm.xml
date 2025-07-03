@@ -17,6 +17,8 @@
         <field name="format" column="format" type="string" />
         <field name="parameters" column="parameters" type="json" />
         <field name="resourceIds" column="resource_ids" type="json" nullable="true" />
+        <field name="temporaryDataStorage" column="temporary_data_storage" type="string" nullable="true" />
+        <field name="batchesCount" column="batches_count" type="integer" />
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create" />
         </field>

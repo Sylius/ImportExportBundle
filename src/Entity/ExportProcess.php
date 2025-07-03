@@ -23,6 +23,10 @@ class ExportProcess extends Process implements ExportProcessInterface
 
     protected array $resourceIds = [];
 
+    protected int $batchesCount = 0;
+
+    protected ?string $temporaryDataStorage = null;
+
     public function getType(): string
     {
         return ExportProcessInterface::TYPE;
@@ -66,5 +70,25 @@ class ExportProcess extends Process implements ExportProcessInterface
     public function setResourceIds(array $resourceIds): void
     {
         $this->resourceIds = $resourceIds;
+    }
+
+    public function getBatchesCount(): int
+    {
+        return $this->batchesCount;
+    }
+
+    public function setBatchesCount(int $count): void
+    {
+        $this->batchesCount = $count;
+    }
+
+    public function getTemporaryDataStorage(): ?string
+    {
+        return $this->temporaryDataStorage;
+    }
+
+    public function setTemporaryDataStorage(?string $storage): void
+    {
+        $this->temporaryDataStorage = $storage;
     }
 }

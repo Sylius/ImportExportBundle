@@ -15,8 +15,10 @@ namespace Sylius\GridImportExport\Messenger\Handler;
 
 use Sylius\GridImportExport\Entity\ProcessInterface;
 use Sylius\GridImportExport\Factory\ProcessFactoryInterface;
+use Sylius\GridImportExport\Manager\BatchedExportDataManagerInterface;
 use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
 use Sylius\GridImportExport\Messenger\Command\ExportCommand;
+use Sylius\GridImportExport\Messenger\Stamp\ExportBatchCounterStamp;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -27,10 +29,11 @@ class CreateExportProcessHandler
      * @param int<1, max> $batchSize
      */
     public function __construct(
-        public ProcessFactoryInterface $processFactory,
-        public RepositoryInterface $processRepository,
-        public MessageBusInterface $messageBus,
-        public int $batchSize = 100,
+        protected ProcessFactoryInterface $processFactory,
+        protected RepositoryInterface $processRepository,
+        protected MessageBusInterface $messageBus,
+        protected BatchedExportDataManagerInterface $batchedDataManager,
+        protected int $batchSize = 100,
     ) {
     }
 
@@ -38,13 +41,18 @@ class CreateExportProcessHandler
     {
         $process = $this->processFactory->createExportProcess($command);
 
+        $this->batchedDataManager->createStorage($process);
+
+        $batchesCount = (int) ceil(count($process->getResourceIds()) / $this->batchSize);
+        $process->setBatchesCount($batchesCount);
+
         $this->processRepository->add($process);
 
         foreach (array_chunk($process->getResourceIds(), $this->batchSize) as $batch) {
             $this->messageBus->dispatch(new ExportCommand(
                 processId: $process->getUuid(),
                 resourceIds: $batch,
-            ));
+            ), [new ExportBatchCounterStamp()]);
         }
     }
 }
