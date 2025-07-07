@@ -1,0 +1,66 @@
+<?php
+
+/*
+ * This file is part of the Sylius package.
+ *
+ * (c) Sylius Sp. z o.o.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Sylius\GridImportExport\Messenger\Handler;
+
+use Sylius\GridImportExport\Entity\ExportProcessInterface;
+use Sylius\GridImportExport\Exception\ExportFailedException;
+use Sylius\GridImportExport\Manager\BatchedExportDataManagerInterface;
+use Sylius\GridImportExport\Messenger\Event\ExportProcessCompleted;
+use Sylius\GridImportExport\Resolver\ExporterResolverInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+
+class ExportCompletedHandler
+{
+    /** @param RepositoryInterface<ExportProcessInterface> $processRepository */
+    public function __construct(
+        private RepositoryInterface $processRepository,
+        private ExporterResolverInterface $exporterResolver,
+        private BatchedExportDataManagerInterface $batchedDataManager,
+    ) {
+    }
+
+    public function __invoke(ExportProcessCompleted $event): void
+    {
+        $process = $this->processRepository->find($event->processId);
+        if (null === $process) {
+            throw new ExportFailedException(sprintf('Process with uuid "%s" not found.', $event->processId));
+        }
+        if (null === $this->batchedDataManager->getStorage($process)) {
+            return;
+        }
+
+        $batchedData = $this->batchedDataManager->getBatchedData($process);
+        $data = iterator_to_array($batchedData);
+
+        if ([] !== $data) {
+            try {
+                $resolver = $this->exporterResolver->resolve($process->getFormat());
+                $outputPath = $resolver->export($data);
+
+                $process->setStatus('success');
+                $process->setOutput($outputPath);
+            } catch (\Throwable $e) {
+                $process->setStatus('failed');
+                $process->setErrorMessage($e->getMessage());
+            }
+        }
+
+        $this->batchedDataManager->deleteBatchedData($process);
+
+        $process->setBatchesCount(0);
+        $this->batchedDataManager->resetStorage($process);
+
+        $this->processRepository->add($process);
+    }
+}

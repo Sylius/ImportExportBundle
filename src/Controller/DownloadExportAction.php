@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Controller;
 
-use Sylius\GridImportExport\Entity\ProcessInterface;
+use Sylius\GridImportExport\Entity\ExportProcessInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,18 +22,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class DownloadExportAction
 {
-    /**
-     * @param RepositoryInterface<ProcessInterface> $processRepository
-     */
+    /** @param RepositoryInterface<ExportProcessInterface> $exportProcessRepository */
     public function __construct(
-        private RepositoryInterface $processRepository,
+        private RepositoryInterface $exportProcessRepository,
     ) {
     }
 
     public function __invoke(string $uuid): Response
     {
-        $process = $this->processRepository->find($uuid);
-
+        $process = $this->exportProcessRepository->find($uuid);
         if (null === $process) {
             throw new NotFoundHttpException(sprintf('Export process "%s" not found', $uuid));
         }

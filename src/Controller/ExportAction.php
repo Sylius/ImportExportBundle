@@ -15,7 +15,7 @@ namespace Sylius\GridImportExport\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\GridImportExport\Messenger\Command\ExportCommand;
+use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
 use Sylius\GridImportExport\Provider\ResourceIds\ResourcesIdsProviderInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -62,12 +62,12 @@ final class ExportAction
             $request,
         );
 
-        $this->commandBus->dispatch(new ExportCommand(
+        $this->commandBus->dispatch(new CreateExportProcess(
             resource: $metadata->getAlias(),
-            grid: $grid,
             format: $format,
-            resourceIds: $resourceIds,
+            grid: $grid,
             parameters: $parameters,
+            resourceIds: $resourceIds,
         ));
 
         /** @var Session $session */

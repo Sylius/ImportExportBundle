@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Factory;
 
+use Sylius\GridImportExport\Entity\ExportProcessInterface;
 use Sylius\GridImportExport\Entity\ProcessInterface;
-use Sylius\GridImportExport\Messenger\Command\ExportCommand;
+use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
 use Sylius\Resource\Factory\FactoryInterface;
 
 /** @extends FactoryInterface<ProcessInterface> */
 interface ProcessFactoryInterface extends FactoryInterface
 {
-    public function createFromExportCommand(ExportCommand $command): ProcessInterface;
+    public function createExportProcess(CreateExportProcess $command): ExportProcessInterface;
 }

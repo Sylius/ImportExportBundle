@@ -18,21 +18,11 @@ use Sylius\Resource\Model\TimestampableInterface;
 
 interface ProcessInterface extends ResourceInterface, TimestampableInterface
 {
-    public const TYPE_EXPORT = 'export';
-
-    public const TYPE_IMPORT = 'import';
-
     public function getUuid(): string;
 
     public function setUuid(string $uuid): void;
 
     public function getType(): string;
-
-    public function setType(string $type): void;
-
-    public function getFormat(): string;
-
-    public function setFormat(string $format): void;
 
     public function getStatus(): string;
 
@@ -41,10 +31,6 @@ interface ProcessInterface extends ResourceInterface, TimestampableInterface
     public function getResource(): string;
 
     public function setResource(string $resource): void;
-
-    public function getResourceIds(): array;
-
-    public function setResourceIds(array $resourceIds): void;
 
     public function getOutput(): string;
 

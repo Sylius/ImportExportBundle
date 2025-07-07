@@ -15,21 +15,15 @@ namespace Sylius\GridImportExport\Entity;
 
 use Sylius\Resource\Model\TimestampableTrait;
 
-class Process implements ProcessInterface
+abstract class Process implements ProcessInterface
 {
     use TimestampableTrait;
 
     protected string $uuid;
 
-    protected string $type;
-
     protected string $resource;
 
-    protected string $format;
-
     protected string $status;
-
-    protected array $resourceIds = [];
 
     protected string $output;
 
@@ -40,16 +34,6 @@ class Process implements ProcessInterface
         return $this->uuid;
     }
 
-    public function getFormat(): string
-    {
-        return $this->format;
-    }
-
-    public function setFormat(string $format): void
-    {
-        $this->format = $format;
-    }
-
     public function getStatus(): string
     {
         return $this->status;
@@ -58,16 +42,6 @@ class Process implements ProcessInterface
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    public function getResourceIds(): array
-    {
-        return $this->resourceIds;
-    }
-
-    public function setResourceIds(array $resourceIds): void
-    {
-        $this->resourceIds = $resourceIds;
     }
 
     public function getUuid(): string
@@ -88,16 +62,6 @@ class Process implements ProcessInterface
     public function setUuid(string $uuid): void
     {
         $this->uuid = $uuid;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
     }
 
     public function getOutput(): string

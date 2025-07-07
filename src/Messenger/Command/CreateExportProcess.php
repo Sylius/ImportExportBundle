@@ -13,10 +13,17 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Messenger\Command;
 
-class ExportCommand
+class CreateExportProcess
 {
+    /**
+     * @param array<mixed> $parameters
+     * @param array<array-key, string|int> $resourceIds
+     */
     public function __construct(
-        public string $processId,
+        public string $resource,
+        public string $format,
+        public string $grid,
+        public array $parameters,
         public array $resourceIds,
     ) {
     }

@@ -7,22 +7,20 @@ sylius_grid:
             export: '@SyliusGridImportExport\admin\import_export\grid\bulk_action\export.html.twig'
 
     grids:
-        sylius_grid_import_export_admin_process:
+        sylius_grid_import_export_admin_process_export:
             driver:
                 name: doctrine/orm
                 options:
-                    class: Sylius\GridImportExport\Entity\Process
+                    class: Sylius\GridImportExport\Entity\ExportProcess
             sorting:
                 createdAt: desc
             fields:
                 createdAt:
                     type: datetime
                     label: sylius.ui.created_at
-                type:
-                    type: twig
-                    label: sylius.ui.type
-                    options:
-                        template: '@SyliusGridImportExport\admin\import_export\grid\field\type.html.twig'
+                format:
+                    type: string
+                    label: sylius_grid_import_export.ui.format
                 resource:
                     type: string
                     label: sylius_grid_import_export.ui.resource
@@ -38,7 +36,7 @@ sylius_grid:
                         label: sylius_grid_import_export.ui.download
                         options:
                             link:
-                                route: sylius_grid_import_export_admin_process_download
+                                route: sylius_grid_import_export_admin_process_export_download
                                 parameters:
                                     uuid: resource.uuid
                     show:

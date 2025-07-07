@@ -1,7 +1,7 @@
 sylius_resource:
     resources:
-        sylius_grid_import_export.process:
+        sylius_grid_import_export.process_export:
             driver: doctrine/orm
             classes:
-                model: Sylius\GridImportExport\Entity\Process
-                interface: Sylius\GridImportExport\Entity\ProcessInterface
+                model: Sylius\GridImportExport\Entity\ExportProcess
+                interface: Sylius\GridImportExport\Entity\ExportProcessInterface

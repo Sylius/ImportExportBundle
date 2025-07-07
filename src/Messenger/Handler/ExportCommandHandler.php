@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Sylius\GridImportExport\Messenger\Handler;
 
-use Sylius\GridImportExport\Entity\ProcessInterface;
-use Sylius\GridImportExport\Factory\ProcessFactoryInterface;
+use Sylius\GridImportExport\Entity\ExportProcessInterface;
+use Sylius\GridImportExport\Exception\ExportFailedException;
+use Sylius\GridImportExport\Manager\BatchedExportDataManagerInterface;
 use Sylius\GridImportExport\Messenger\Command\ExportCommand;
 use Sylius\GridImportExport\Provider\Registry\ResourceDataProviderRegistryInterface;
 use Sylius\GridImportExport\Resolver\ExporterResolverInterface;
@@ -23,34 +24,40 @@ use Sylius\Resource\Metadata\RegistryInterface;
 
 class ExportCommandHandler
 {
-    /**
-     * @param RepositoryInterface<ProcessInterface> $processRepository
-     */
+    /** @param RepositoryInterface<ExportProcessInterface> $processRepository */
     public function __construct(
-        public RegistryInterface $metadataRegistry,
-        public ProcessFactoryInterface $processFactory,
-        public RepositoryInterface $processRepository,
-        public ResourceDataProviderRegistryInterface $dataProviderRegistry,
-        public ExporterResolverInterface $exporterResolver,
+        protected RegistryInterface $metadataRegistry,
+        protected RepositoryInterface $processRepository,
+        protected ResourceDataProviderRegistryInterface $dataProviderRegistry,
+        protected ExporterResolverInterface $exporterResolver,
+        protected BatchedExportDataManagerInterface $batchManager,
     ) {
     }
 
     public function __invoke(ExportCommand $command): void
     {
-        $resolver = $this->exporterResolver->resolve($command->format);
+        $process = $this->processRepository->find($command->processId);
+        if (null === $process) {
+            throw new ExportFailedException(sprintf('Process with uuid "%s" not found.', $command->processId));
+        }
 
-        $process = $this->processFactory->createFromExportCommand($command);
-
-        $this->processRepository->add($process);
-
-        $resourceMetadata = $this->metadataRegistry->get($command->resource);
+        $resourceMetadata = $this->metadataRegistry->get($process->getResource());
 
         $data = $this->dataProviderRegistry
             ->getProvider($resourceMetadata)
-            ->getData($resourceMetadata, $command->grid, $command->resourceIds, $command->parameters)
+            ->getData($resourceMetadata, $process->getGrid(), $command->resourceIds, $process->getParameters())
         ;
 
+        $process->setBatchesCount($process->getBatchesCount() - 1);
+
+        if (null !== $this->batchManager->getStorage($process)) {
+            $this->batchManager->saveBatch($process, $data);
+
+            return;
+        }
+
         try {
+            $resolver = $this->exporterResolver->resolve($process->getFormat());
             $outputPath = $resolver->export($data);
 
             $process->setStatus('success');

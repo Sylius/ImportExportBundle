@@ -6,31 +6,32 @@ sylius_import_export.admin.resource.export:
         _sylius:
             filterable: true
 
-sylius_grid_import_export_admin_process:
+sylius_grid_import_export_admin_process_export:
     resource: |
-        alias: sylius_grid_import_export.process
+        alias: sylius_grid_import_export.process_export
         section: admin
         templates: "@SyliusAdmin\\shared\\crud"
         except: ['show', 'create', 'update']
         redirect: index
-        grid: sylius_grid_import_export_admin_process
+        grid: sylius_grid_import_export_admin_process_export
         permission: true
+        path: /import-export/exports
     type: sylius.resource
 
-sylius_grid_import_export_admin_process_show:
-    path: /import-export/processes/{id}
+sylius_grid_import_export_admin_process_export_show:
+    path: /import-export/exports/{id}
     methods: [ GET ]
     defaults:
-        _controller: sylius_grid_import_export.controller.process::showAction
+        _controller: sylius_grid_import_export.controller.process_export::showAction
         _sylius:
             section: admin
             template: '@SyliusAdmin/shared/crud/show.html.twig'
             permission: true
             vars:
-                hook_prefix: 'sylius_grid_import_export.admin.process'
+                hook_prefix: 'sylius_grid_import_export.admin.process_export'
 
-sylius_grid_import_export_admin_process_download:
-    path: /import-export/processes/{uuid}/download
+sylius_grid_import_export_admin_process_export_download:
+    path: /import-export/exports/{uuid}/download
     methods: [ GET ]
     defaults:
         _controller: sylius_import_export.controller.download_export_action

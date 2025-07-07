@@ -10,14 +10,38 @@
     </imports>
 
     <services>
-        <service id="sylius_import_export.messenger.command_handler.export" class="Sylius\GridImportExport\Messenger\Handler\ExportCommandHandler">
-            <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius_import_export.custom_factory.process" />
-            <argument type="service" id="sylius_grid_import_export.repository.process" />
-            <argument type="service" id="sylius_import_export.registry.resource_data_provider" />
-            <argument type="service" id="sylius_grid_import_export.exporter_resolver" />
+        <service id="sylius_import_export.messenger.command_handler.create_export_process" class="Sylius\GridImportExport\Messenger\Handler\CreateExportProcessHandler">
+            <argument type="service" id="sylius_import_export.factory.process" />
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
+            <argument type="service" id="sylius_import_export.export.command_bus" />
+            <argument type="service" id="sylius_import_export.export.batched_data_manager" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
+        </service>
+
+        <service id="sylius_import_export.messenger.command_handler.export" class="Sylius\GridImportExport\Messenger\Handler\ExportCommandHandler">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
+            <argument type="service" id="sylius_import_export.registry.resource_data_provider" />
+            <argument type="service" id="sylius_grid_import_export.exporter_resolver" />
+            <argument type="service" id="sylius_import_export.export.batched_data_manager" />
+
+            <tag name="messenger.message_handler" bus="sylius_import_export.export.command_bus" />
+        </service>
+
+        <service id="sylius_import_export.messenger.event_handler.export_completed" class="Sylius\GridImportExport\Messenger\Handler\ExportCompletedHandler">
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
+            <argument type="service" id="sylius_grid_import_export.exporter_resolver" />
+            <argument type="service" id="sylius_import_export.export.batched_data_manager" />
+
+            <tag name="messenger.message_handler" bus="sylius_import_export.export.event_bus" />
+        </service>
+
+        <service id="sylius_import_export.messenger.middleware.export_batch_tracking" class="Sylius\GridImportExport\Messenger\Middleware\ExportBatchTrackingMiddleware">
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
+            <argument type="service" id="sylius_import_export.export.event_bus" />
+
+            <tag name="messenger.middleware" />
         </service>
 
         <service id="sylius_import_export.twig.component.export_resource" class="Sylius\GridImportExport\Twig\Component\ExportResourceFormComponent">
@@ -55,13 +79,18 @@
         </service>
 
         <service id="sylius_import_export.controller.download_export_action" class="Sylius\GridImportExport\Controller\DownloadExportAction" public="true">
-            <argument type="service" id="sylius_grid_import_export.repository.process" />
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
 
             <tag name="controller.service_arguments" />
         </service>
 
-        <service id="sylius_import_export.custom_factory.process" class="Sylius\GridImportExport\Factory\ProcessFactory" decorates="sylius_grid_import_export.factory.process">
-            <argument type="service" id=".inner" />
+        <service id="sylius_import_export.factory.process" class="Sylius\GridImportExport\Factory\ProcessFactory">
+            <argument type="service" id="sylius_grid_import_export.factory.process_export" />
+        </service>
+
+        <service id="sylius_import_export.export.batched_data_manager" class="Sylius\GridImportExport\Manager\BatchedExportDataManager">
+            <argument type="service" id="sylius_grid_import_export.repository.process_export" />
+            <argument>%sylius_grid_import_export.export_files_directory%</argument>
         </service>
 
         <service id="sylius_grid_import_export.menu.admin_listener" class="Sylius\GridImportExport\Menu\AdminImportExportMenuListener">

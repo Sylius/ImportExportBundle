@@ -11,13 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Command;
+namespace Sylius\GridImportExport\Messenger\Event;
 
-class ExportCommand
+class ExportProcessCompleted
 {
     public function __construct(
         public string $processId,
-        public array $resourceIds,
     ) {
     }
 }

@@ -7,6 +7,8 @@ sylius_grid_import_export:
         export: "Export"
         import_export: "Import / export"
         processes: "Processes"
+        process_exports: "Exports"
+        process_export: "Export"
         resource: "Resource"
         format: "Format"
         process: "Process"

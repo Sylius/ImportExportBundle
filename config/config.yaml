@@ -1,4 +1,5 @@
 imports:
+    - { resource: "./config/messenger.yaml" }
     - { resource: "./config/sylius_grid.yaml" }
     - { resource: "./config/sylius_resource.yaml" }
     - { resource: "./config/twig_hooks.yaml" }

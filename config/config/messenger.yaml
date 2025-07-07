@@ -1,0 +1,24 @@
+parameters:
+    env(SYLIUS_IMPORT_EXPORT_MESSENGER_TRANSPORT_EXPORT_COMMAND_DSN): 'sync://'
+    env(SYLIUS_IMPORT_EXPORT_MESSENGER_TRANSPORT_EXPORT_EVENT_DSN): 'sync://'
+
+    sylius_import_export_messenger_transport_export_command_dsn: '%env(resolve:SYLIUS_IMPORT_EXPORT_MESSENGER_TRANSPORT_EXPORT_COMMAND_DSN)%'
+    sylius_import_export_messenger_transport_export_event_dsn: '%env(resolve:SYLIUS_IMPORT_EXPORT_MESSENGER_TRANSPORT_EXPORT_EVENT_DSN)%'
+
+framework:
+    messenger:
+        transports:
+            export_command:
+                dsn: '%sylius_import_export_messenger_transport_export_command_dsn%'
+                failure_transport: 'export_event'
+            export_event:
+                dsn: '%sylius_import_export_messenger_transport_export_event_dsn%'
+        routing:
+            'Sylius\GridImportExport\Messenger\Command\ExportCommand': export_command
+            'Sylius\GridImportExport\Messenger\Event\ExportProcessCompleted': export_event
+        buses:
+            sylius_import_export.export.command_bus:
+                middleware:
+                    - doctrine_transaction
+                    - sylius_import_export.messenger.middleware.export_batch_tracking
+            sylius_import_export.export.event_bus: ~
