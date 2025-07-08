@@ -14,8 +14,8 @@ framework:
             export_event:
                 dsn: '%sylius_import_export_messenger_transport_export_event_dsn%'
         routing:
-            'Sylius\GridImportExport\Messenger\Command\ExportCommand': export_command
-            'Sylius\GridImportExport\Messenger\Event\ExportProcessCompleted': export_event
+            'Sylius\ImportExport\Messenger\Command\ExportCommand': export_command
+            'Sylius\ImportExport\Messenger\Event\ExportProcessCompleted': export_event
         buses:
             sylius_import_export.export.command_bus:
                 middleware:

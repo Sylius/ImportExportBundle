@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Menu;
+namespace Sylius\ImportExport\Menu;
 
 use Knp\Menu\ItemInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
@@ -28,7 +28,7 @@ final readonly class AdminImportExportMenuListener
 
         $exportSection = $menu
             ->addChild('import_export')
-            ->setLabel('sylius_grid_import_export.ui.import_export')
+            ->setLabel('sylius_import_export.ui.import_export')
             ->setLabelAttribute('icon', 'tabler:arrows-left-right')
         ;
 
@@ -41,9 +41,9 @@ final readonly class AdminImportExportMenuListener
     {
         $item
             ->addChild('processes', [
-                'route' => 'sylius_grid_import_export_admin_process_export_index',
+                'route' => 'sylius_import_export_admin_process_export_index',
             ])
-            ->setLabel('sylius_grid_import_export.ui.process_exports')
+            ->setLabel('sylius_import_export.ui.process_exports')
         ;
     }
 }

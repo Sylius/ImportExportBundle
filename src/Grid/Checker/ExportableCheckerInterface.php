@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Grid\Checker;
+namespace Sylius\ImportExport\Grid\Checker;
 
 use Sylius\Component\Grid\Definition\Grid;
 

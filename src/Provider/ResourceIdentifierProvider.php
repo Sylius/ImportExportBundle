@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider;
+namespace Sylius\ImportExport\Provider;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\MappingException;
-use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Exception\ProviderException;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class ResourceIdentifierProvider implements ResourceIdentifierProviderInterface

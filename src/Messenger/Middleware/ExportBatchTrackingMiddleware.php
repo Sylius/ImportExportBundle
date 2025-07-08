@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Middleware;
+namespace Sylius\ImportExport\Messenger\Middleware;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
-use Sylius\GridImportExport\Messenger\Command\ExportCommand;
-use Sylius\GridImportExport\Messenger\Event\ExportProcessCompleted;
-use Sylius\GridImportExport\Messenger\Stamp\ExportBatchCounterStamp;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Messenger\Command\ExportCommand;
+use Sylius\ImportExport\Messenger\Event\ExportProcessCompleted;
+use Sylius\ImportExport\Messenger\Stamp\ExportBatchCounterStamp;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Resolver;
+namespace Sylius\ImportExport\Resolver;
 
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
-use Sylius\GridImportExport\Exporter\ExporterInterface;
+use Sylius\ImportExport\Exporter\ExporterInterface;
 
 final readonly class ExporterResolver implements ExporterResolverInterface
 {

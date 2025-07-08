@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Manager;
+namespace Sylius\ImportExport\Manager;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
 
 interface BatchedExportDataManagerInterface
 {

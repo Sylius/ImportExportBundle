@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Form\ChoiceLoader;
+namespace Sylius\ImportExport\Form\ChoiceLoader;
 
-use Sylius\GridImportExport\Exporter\ExporterInterface;
+use Sylius\ImportExport\Exporter\ExporterInterface;
 use Symfony\Component\Form\ChoiceList\Loader\AbstractChoiceLoader;
 
 final class ExportFormatsChoiceLoader extends AbstractChoiceLoader

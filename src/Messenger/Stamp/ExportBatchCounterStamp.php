@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Stamp;
+namespace Sylius\ImportExport\Messenger\Stamp;
 
 use Symfony\Component\Messenger\Stamp\StampInterface;
 

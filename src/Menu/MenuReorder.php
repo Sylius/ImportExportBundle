@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Menu;
+namespace Sylius\ImportExport\Menu;
 
 use Knp\Menu\ItemInterface;
 

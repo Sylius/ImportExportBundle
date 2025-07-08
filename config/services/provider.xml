@@ -6,23 +6,23 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <services>
-        <service id="sylius_import_export.provider.resource_identifier" class="Sylius\GridImportExport\Provider\ResourceIdentifierProvider">
+        <service id="sylius_import_export.provider.resource_identifier" class="Sylius\ImportExport\Provider\ResourceIdentifierProvider">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
 
-        <service id="sylius_import_export.registry.resource_data_provider" class="Sylius\GridImportExport\Provider\Registry\ResourceDataProviderRegistry">
+        <service id="sylius_import_export.registry.resource_data_provider" class="Sylius\ImportExport\Provider\Registry\ResourceDataProviderRegistry">
             <argument>%sylius_import_export.export.resources%</argument>
             <argument type="tagged_iterator" tag="sylius_import_export.resource_data_provider" index-by="service" />
         </service>
 
-        <service id="sylius_import_export.provider.resource_data.dbal" class="Sylius\GridImportExport\Provider\ResourceData\DbalResourceDataProvider">
+        <service id="sylius_import_export.provider.resource_data.dbal" class="Sylius\ImportExport\Provider\ResourceData\DbalResourceDataProvider">
             <argument type="service" id="sylius_import_export.provider.resource_identifier" />
             <argument type="service" id="doctrine.orm.entity_manager" />
 
             <tag name="sylius_import_export.resource_data_provider" />
         </service>
 
-        <service id="sylius_import_export.provider.resource_data.grid" class="Sylius\GridImportExport\Provider\ResourceData\GridResourceDataProvider">
+        <service id="sylius_import_export.provider.resource_data.grid" class="Sylius\ImportExport\Provider\ResourceData\GridResourceDataProvider">
             <argument type="service" id="sylius_import_export.provider.resource_identifier" />
             <argument type="service" id="sylius.grid.chain_provider" />
             <argument type="service" id="sylius.grid.data_source_provider" />
@@ -30,11 +30,11 @@
             <tag name="sylius_import_export.resource_data_provider" />
         </service>
 
-        <service id="sylius_import_export.provider.resources_ids" class="Sylius\GridImportExport\Provider\ResourceIds\CompositeResourceIdsProvider">
+        <service id="sylius_import_export.provider.resources_ids" class="Sylius\ImportExport\Provider\ResourceIds\CompositeResourceIdsProvider">
             <argument type="tagged_iterator" tag="sylius_import_export.resource_ids_provider" />
         </service>
 
-        <service id="sylius_import_export.provider.resources_ids.request_based" class="Sylius\GridImportExport\Provider\ResourceIds\RequestBasedResourcesIdsProvider">
+        <service id="sylius_import_export.provider.resources_ids.request_based" class="Sylius\ImportExport\Provider\ResourceIds\RequestBasedResourcesIdsProvider">
             <argument type="service" id="sylius.resource_controller.request_configuration_factory" />
             <argument type="service" id="sylius.resource_controller.resources_collection_provider" />
             <argument type="service" id="sylius.grid.data_source_provider" />
@@ -45,7 +45,7 @@
             <tag name="sylius_import_export.resource_ids_provider" />
         </service>
 
-        <service id="sylius_import_export.provider.resources_ids.static" class="Sylius\GridImportExport\Provider\ResourceIds\StaticResourceIdsProvider">
+        <service id="sylius_import_export.provider.resources_ids.static" class="Sylius\ImportExport\Provider\ResourceIds\StaticResourceIdsProvider">
             <tag name="sylius_import_export.resource_ids_provider" priority="512" />
         </service>
     </services>

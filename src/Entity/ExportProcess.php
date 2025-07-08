@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Entity;
+namespace Sylius\ImportExport\Entity;
 
 class ExportProcess extends Process implements ExportProcessInterface
 {

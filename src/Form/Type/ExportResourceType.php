@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Form\Type;
+namespace Sylius\ImportExport\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -31,7 +31,7 @@ final class ExportResourceType extends AbstractType
     {
         $builder
             ->add('format', ChoiceType::class, [
-                'label' => 'sylius_grid_import_export.grid.form.format',
+                'label' => 'sylius_import_export.grid.form.format',
                 'choice_loader' => $this->choiceLoader,
             ])
             ->add('ids', HiddenType::class)

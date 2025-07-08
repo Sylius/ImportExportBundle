@@ -1,17 +1,17 @@
 sylius_grid:
     templates:
         action:
-            export: '@SyliusGridImportExport\admin\import_export\grid\action\export.html.twig'
-            download: '@SyliusGridImportExport\admin\import_export\grid\action\download.html.twig'
+            export: '@SyliusImportExport\admin\import_export\grid\action\export.html.twig'
+            download: '@SyliusImportExport\admin\import_export\grid\action\download.html.twig'
         bulk_action:
-            export: '@SyliusGridImportExport\admin\import_export\grid\bulk_action\export.html.twig'
+            export: '@SyliusImportExport\admin\import_export\grid\bulk_action\export.html.twig'
 
     grids:
-        sylius_grid_import_export_admin_process_export:
+        sylius_import_export_admin_process_export:
             driver:
                 name: doctrine/orm
                 options:
-                    class: Sylius\GridImportExport\Entity\ExportProcess
+                    class: Sylius\ImportExport\Entity\ExportProcess
             sorting:
                 createdAt: desc
             fields:
@@ -20,23 +20,23 @@ sylius_grid:
                     label: sylius.ui.created_at
                 format:
                     type: string
-                    label: sylius_grid_import_export.ui.format
+                    label: sylius_import_export.ui.format
                 resource:
                     type: string
-                    label: sylius_grid_import_export.ui.resource
+                    label: sylius_import_export.ui.resource
                 status:
                     type: twig
                     label: sylius.ui.status
                     options:
-                        template: '@SyliusGridImportExport\admin\import_export\grid\field\status.html.twig'
+                        template: '@SyliusImportExport\admin\import_export\grid\field\status.html.twig'
             actions:
                 item:
                     download:
                         type: download
-                        label: sylius_grid_import_export.ui.download
+                        label: sylius_import_export.ui.download
                         options:
                             link:
-                                route: sylius_grid_import_export_admin_process_export_download
+                                route: sylius_import_export_admin_process_export_download
                                 parameters:
                                     uuid: resource.uuid
                     show:

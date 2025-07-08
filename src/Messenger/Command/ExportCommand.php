@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Command;
+namespace Sylius\ImportExport\Messenger\Command;
 
 class ExportCommand
 {

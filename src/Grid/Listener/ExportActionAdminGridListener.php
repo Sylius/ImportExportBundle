@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Grid\Listener;
+namespace Sylius\ImportExport\Grid\Listener;
 
 use Sylius\Bundle\CoreBundle\SectionResolver\SectionProviderInterface;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\ActionGroupInterface;
@@ -20,7 +20,7 @@ use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\ActionGroup;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Event\GridDefinitionConverterEvent;
-use Sylius\GridImportExport\Grid\Checker\ExportableCheckerInterface;
+use Sylius\ImportExport\Grid\Checker\ExportableCheckerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class ExportActionAdminGridListener

@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Manager;
+namespace Sylius\ImportExport\Manager;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
-use Sylius\GridImportExport\Exporter\CsvExporter;
-use Sylius\GridImportExport\Exporter\JsonExporter;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Exporter\CsvExporter;
+use Sylius\ImportExport\Exporter\JsonExporter;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class BatchedExportDataManager implements BatchedExportDataManagerInterface

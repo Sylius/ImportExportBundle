@@ -5,7 +5,7 @@
 Minimal resource configuration:
 
 ```yaml
-sylius_grid_import_export:
+sylius_import_export:
     export:
         resources:
             app.brand: ~
@@ -14,7 +14,7 @@ sylius_grid_import_export:
 Full resource configuration:
 
 ```yaml
-sylius_grid_import_export:
+sylius_import_export:
     export:
         resources:
             app.brand:
@@ -27,7 +27,7 @@ sylius_grid_import_export:
 Reference:
 
 ```yaml
-sylius_grid_import_export:
+sylius_import_export:
     export:
         # The provider used by default when none is configured on a specific resource;
         # defaults to 'sylius_import_export.provider.resource_data.grid'.

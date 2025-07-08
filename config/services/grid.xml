@@ -6,21 +6,21 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <services>
-        <service id="sylius_import_export.grid.checker.exportable" class="Sylius\GridImportExport\Grid\Checker\ExportableChecker">
+        <service id="sylius_import_export.grid.checker.exportable" class="Sylius\ImportExport\Grid\Checker\ExportableChecker">
             <argument type="service" id="sylius.resource_registry" />
             <argument>%sylius_import_export.export.resources%</argument>
         </service>
 
         <service
             id="sylius_import_export.grid.array_to_definition_converter.common_event_dispatching"
-            class="Sylius\GridImportExport\Grid\Definition\CommonEventDispatchingArrayToDefinitionConverter"
+            class="Sylius\ImportExport\Grid\Definition\CommonEventDispatchingArrayToDefinitionConverter"
             decorates="sylius.grid.array_to_definition_converter"
         >
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id=".inner" />
         </service>
 
-        <service id="sylius_import_export.grid.listener.admin.export_action" class="Sylius\GridImportExport\Grid\Listener\ExportActionAdminGridListener">
+        <service id="sylius_import_export.grid.listener.admin.export_action" class="Sylius\ImportExport\Grid\Listener\ExportActionAdminGridListener">
             <argument type="service" id="request_stack" />
             <argument type="service" id="sylius.section_resolver.uri_based" on-invalid="null" />
             <argument type="service" id="sylius_import_export.grid.checker.exportable" />

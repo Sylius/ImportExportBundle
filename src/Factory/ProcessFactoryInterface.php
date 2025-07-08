@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Factory;
+namespace Sylius\ImportExport\Factory;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
-use Sylius\GridImportExport\Entity\ProcessInterface;
-use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Entity\ProcessInterface;
+use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
 use Sylius\Resource\Factory\FactoryInterface;
 
 /** @extends FactoryInterface<ProcessInterface> */

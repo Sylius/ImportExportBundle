@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Handler;
+namespace Sylius\ImportExport\Messenger\Handler;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
-use Sylius\GridImportExport\Exception\ExportFailedException;
-use Sylius\GridImportExport\Manager\BatchedExportDataManagerInterface;
-use Sylius\GridImportExport\Messenger\Command\ExportCommand;
-use Sylius\GridImportExport\Provider\Registry\ResourceDataProviderRegistryInterface;
-use Sylius\GridImportExport\Resolver\ExporterResolverInterface;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Exception\ExportFailedException;
+use Sylius\ImportExport\Manager\BatchedExportDataManagerInterface;
+use Sylius\ImportExport\Messenger\Command\ExportCommand;
+use Sylius\ImportExport\Provider\Registry\ResourceDataProviderRegistryInterface;
+use Sylius\ImportExport\Resolver\ExporterResolverInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 

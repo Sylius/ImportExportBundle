@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Resolver;
+namespace Sylius\ImportExport\Resolver;
 
-use Sylius\GridImportExport\Exporter\ExporterInterface;
+use Sylius\ImportExport\Exporter\ExporterInterface;
 
 interface ExporterResolverInterface
 {

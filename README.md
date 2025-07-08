@@ -10,7 +10,7 @@
 
 <h1 align="center">Grid Import/Export Bundle</h1>
 
-The GridImportExportBundle allows for easy and decoupled data migration to and from various mediums.<br>
+The ImportExportBundle allows for easy and decoupled data migration to and from various mediums.<br>
 It works by relying on the Sylius [Resource](https://github.com/sylius/syliusresourcebundle) and [Grid](https://github.com/Sylius/syliusgridbundle) systems for resolving and providing data.
 
 ## Export
@@ -66,8 +66,8 @@ Symfony Flex, it's much quicker!
 3. Configure export for resources:
 
     ```yaml
-    # config/packages/sylius_grid_import_export.yaml
-    sylius_grid_import_export:
+    # config/packages/sylius_import_export.yaml
+    sylius_import_export:
         export:
             resources:
                 sylius.order: ~
@@ -81,7 +81,7 @@ Symfony Flex, it's much quicker!
 ## Exported files
 
 By default, when a resource gets exported, a file is saved on the server. The save directory is specified
-with the `%sylius_grid_import_export.export_files_directory%` parameter, that can be overridden if needed.
+with the `%sylius_import_export.export_files_directory%` parameter, that can be overridden if needed.
 
 ## Security issues
 

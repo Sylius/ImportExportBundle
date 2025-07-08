@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Exception;
+namespace Sylius\ImportExport\Exception;
 
 class ExportFailedException extends \RuntimeException
 {

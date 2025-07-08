@@ -4,7 +4,7 @@
     xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
     xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
 >
-    <mapped-superclass name="Sylius\GridImportExport\Entity\ExportProcess" table="sylius_grid_import_export_process_export">
+    <mapped-superclass name="Sylius\ImportExport\Entity\ExportProcess" table="sylius_import_export_process_export">
         <id name="uuid" column="uuid" type="string">
             <generator strategy="NONE" />
         </id>

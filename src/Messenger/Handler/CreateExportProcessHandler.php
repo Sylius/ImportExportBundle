@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Handler;
+namespace Sylius\ImportExport\Messenger\Handler;
 
-use Sylius\GridImportExport\Entity\ProcessInterface;
-use Sylius\GridImportExport\Factory\ProcessFactoryInterface;
-use Sylius\GridImportExport\Manager\BatchedExportDataManagerInterface;
-use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
-use Sylius\GridImportExport\Messenger\Command\ExportCommand;
-use Sylius\GridImportExport\Messenger\Stamp\ExportBatchCounterStamp;
+use Sylius\ImportExport\Entity\ProcessInterface;
+use Sylius\ImportExport\Factory\ProcessFactoryInterface;
+use Sylius\ImportExport\Manager\BatchedExportDataManagerInterface;
+use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
+use Sylius\ImportExport\Messenger\Command\ExportCommand;
+use Sylius\ImportExport\Messenger\Stamp\ExportBatchCounterStamp;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 

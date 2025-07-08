@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Exporter;
+namespace Sylius\ImportExport\Exporter;
 
-use Sylius\GridImportExport\Exception\ExportFailedException;
+use Sylius\ImportExport\Exception\ExportFailedException;
 
 final class JsonExporter extends AbstractExporter
 {

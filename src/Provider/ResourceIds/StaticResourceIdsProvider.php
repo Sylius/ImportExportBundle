@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\ResourceIds;
+namespace Sylius\ImportExport\Provider\ResourceIds;
 
 use Sylius\Resource\Metadata\MetadataInterface;
 

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Exporter;
+namespace Sylius\ImportExport\Exporter;
 
 use League\Csv\Writer;
-use Sylius\GridImportExport\Exception\ExportFailedException;
+use Sylius\ImportExport\Exception\ExportFailedException;
 
 final class CsvExporter extends AbstractExporter
 {

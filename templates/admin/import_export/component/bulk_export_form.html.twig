@@ -1,4 +1,4 @@
-{# Rendered with \Sylius\GridImportExport\Twig\Component\ExportResourceFormComponent #}
+{# Rendered with \Sylius\ImportExport\Twig\Component\ExportResourceFormComponent #}
 
 {% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
 
@@ -11,7 +11,7 @@
 
 <div class="dropdown">
     <button class="btn btn-ghost-primary dropdown-toggle" disabled type="button" data-bs-toggle="dropdown" aria-expanded="false" data-check-all-action="index">
-        {{ 'sylius_grid_import_export.ui.export'|trans }}
+        {{ 'sylius_import_export.ui.export'|trans }}
     </button>
     <div class="dropdown-menu p-4">
         {{ form_start(form, {'action': path('sylius_import_export.admin.resource.export', export_parameters), 'attr': {'novalidate': 'novalidate', 'data-bulk-export': 'index'}}) }}
@@ -21,7 +21,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            {{ button.primary({'type': 'submit', 'text': 'sylius_grid_import_export.ui.export'|trans}) }}
+            {{ button.primary({'type': 'submit', 'text': 'sylius_import_export.ui.export'|trans}) }}
         </div>
 
         {{ form_widget(form.resourceClass) }}

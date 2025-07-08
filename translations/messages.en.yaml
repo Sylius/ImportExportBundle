@@ -1,4 +1,4 @@
-sylius_grid_import_export:
+sylius_import_export:
     grid:
         form:
             export: Export

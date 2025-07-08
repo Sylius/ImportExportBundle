@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Controller;
+namespace Sylius\ImportExport\Controller;
 
-use Sylius\GridImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Entity\ExportProcessInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;

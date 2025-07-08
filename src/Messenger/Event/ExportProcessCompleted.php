@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Messenger\Event;
+namespace Sylius\ImportExport\Messenger\Event;
 
 class ExportProcessCompleted
 {

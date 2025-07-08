@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Controller;
+namespace Sylius\ImportExport\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\GridImportExport\Messenger\Command\CreateExportProcess;
-use Sylius\GridImportExport\Provider\ResourceIds\ResourcesIdsProviderInterface;
+use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
+use Sylius\ImportExport\Provider\ResourceIds\ResourcesIdsProviderInterface;
 use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -72,7 +72,7 @@ final class ExportAction
 
         /** @var Session $session */
         $session = $request->getSession();
-        $session->getFlashBag()->add('success', 'sylius_grid_import_export.export_started');
+        $session->getFlashBag()->add('success', 'sylius_import_export.export_started');
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');
     }

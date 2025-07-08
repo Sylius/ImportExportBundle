@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\ResourceData;
+namespace Sylius\ImportExport\Provider\ResourceData;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sylius\GridImportExport\Exception\ProviderException;
-use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
+use Sylius\ImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class DbalResourceDataProvider implements ResourceDataProviderInterface

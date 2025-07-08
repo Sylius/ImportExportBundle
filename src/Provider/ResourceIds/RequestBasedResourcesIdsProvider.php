@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\ResourceIds;
+namespace Sylius\ImportExport\Provider\ResourceIds;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\DataSource as ORMDataSource;
@@ -22,8 +22,8 @@ use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
 use Sylius\Component\Grid\Data\DataSourceProviderInterface;
 use Sylius\Component\Grid\Parameters;
-use Sylius\GridImportExport\Exception\ProviderException;
-use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
+use Sylius\ImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\Request;

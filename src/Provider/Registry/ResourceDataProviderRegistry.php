@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\Registry;
+namespace Sylius\ImportExport\Provider\Registry;
 
-use Sylius\GridImportExport\Exception\ProviderException;
-use Sylius\GridImportExport\Provider\ResourceData\ResourceDataProviderInterface;
+use Sylius\ImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Provider\ResourceData\ResourceDataProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class ResourceDataProviderRegistry implements ResourceDataProviderRegistryInterface

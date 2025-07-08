@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\ResourceIds;
+namespace Sylius\ImportExport\Provider\ResourceIds;
 
-use Sylius\GridImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Exception\ProviderException;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 interface ResourcesIdsProviderInterface

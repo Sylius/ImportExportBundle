@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Provider\ResourceData;
+namespace Sylius\ImportExport\Provider\ResourceData;
 
 use Sylius\Bundle\GridBundle\Doctrine\ORM\DataSource as ORMDataSource;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\Driver as ORMDriver;
 use Sylius\Component\Grid\Data\DataSourceProviderInterface;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Provider\GridProviderInterface;
-use Sylius\GridImportExport\Exception\ProviderException;
-use Sylius\GridImportExport\Provider\ResourceIdentifierProviderInterface;
+use Sylius\ImportExport\Exception\ProviderException;
+use Sylius\ImportExport\Provider\ResourceIdentifierProviderInterface;
 use Sylius\Resource\Metadata\MetadataInterface;
 
 final class GridResourceDataProvider implements ResourceDataProviderInterface

@@ -1,2 +1,2 @@
-sylius_grid_import_export:
+sylius_import_export:
     export_started: "Export started and will be processed in the background. You can check the status in the Import/Export processes list."

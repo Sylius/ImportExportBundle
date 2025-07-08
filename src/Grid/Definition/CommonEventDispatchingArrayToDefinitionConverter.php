@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Grid\Definition;
+namespace Sylius\ImportExport\Grid\Definition;
 
 use Sylius\Component\Grid\Definition\ArrayToDefinitionConverter;
 use Sylius\Component\Grid\Definition\ArrayToDefinitionConverterInterface;

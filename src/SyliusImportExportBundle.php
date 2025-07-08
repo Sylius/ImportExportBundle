@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport;
+namespace Sylius\ImportExport;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-final class SyliusGridImportExportBundle extends Bundle
+final class SyliusImportExportBundle extends Bundle
 {
     public function getPath(): string
     {

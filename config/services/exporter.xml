@@ -6,23 +6,23 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <parameters>
-        <parameter key="sylius_grid_import_export.export_files_directory">%kernel.project_dir%/etc/export</parameter>
+        <parameter key="sylius_import_export.export_files_directory">%kernel.project_dir%/etc/export</parameter>
     </parameters>
 
     <services>
-        <service id="sylius_grid_import_export.exporter.csv" class="Sylius\GridImportExport\Exporter\CsvExporter">
-            <argument type="string">%sylius_grid_import_export.export_files_directory%</argument>
+        <service id="sylius_import_export.exporter.csv" class="Sylius\ImportExport\Exporter\CsvExporter">
+            <argument type="string">%sylius_import_export.export_files_directory%</argument>
             <tag name="sylius.grid_import_export.exporter" format="csv" />
         </service>
 
-        <service id="sylius_grid_import_export.exporter.json" class="Sylius\GridImportExport\Exporter\JsonExporter">
-            <argument type="string">%sylius_grid_import_export.export_files_directory%</argument>
+        <service id="sylius_import_export.exporter.json" class="Sylius\ImportExport\Exporter\JsonExporter">
+            <argument type="string">%sylius_import_export.export_files_directory%</argument>
             <tag name="sylius.grid_import_export.exporter" format="json" />
         </service>
 
-        <service id="sylius_grid_import_export.exporter_resolver" class="Sylius\GridImportExport\Resolver\ExporterResolver">
+        <service id="sylius_import_export.exporter_resolver" class="Sylius\ImportExport\Resolver\ExporterResolver">
             <argument type="tagged_locator" tag="sylius.grid_import_export.exporter" index-by="format" />
         </service>
-        <service id="Sylius\GridImportExport\Resolver\ExporterResolverInterface" alias="sylius_grid_import_export.exporter_resolver" />
+        <service id="Sylius\ImportExport\Resolver\ExporterResolverInterface" alias="sylius_import_export.exporter_resolver" />
     </services>
 </container>

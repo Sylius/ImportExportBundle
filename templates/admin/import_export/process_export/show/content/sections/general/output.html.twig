@@ -1,7 +1,7 @@
 {% set resource = hookable_metadata.context.resource %}
 
 <div class="row">
-    <div class="col-12 col-md-4 fw-bold">{{ 'sylius_grid_import_export.ui.output_file'|trans }}</div>
+    <div class="col-12 col-md-4 fw-bold">{{ 'sylius_import_export.ui.output_file'|trans }}</div>
     <div class="col-12 col-md-8">
         {% if resource.status == 'success' and resource.output %}
             <span class="text-success">
@@ -11,7 +11,7 @@
         {% elseif resource.status == 'failed' %}
             <span class="text-danger">
                 <i class="icon icon-exclamation-triangle"></i>
-                {{ 'sylius_grid_import_export.ui.export_failed'|trans }}
+                {{ 'sylius_import_export.ui.export_failed'|trans }}
                 {% if resource.errorMessage %}
                     <br>
                     <small class="text-muted">{{ resource.errorMessage }}</small>
@@ -20,10 +20,10 @@
         {% elseif resource.status == 'processing' %}
             <span class="text-muted">
                 <i class="icon icon-spinner icon-spin"></i>
-                {{ 'sylius_grid_import_export.ui.processing'|trans }}
+                {{ 'sylius_import_export.ui.processing'|trans }}
             </span>
         {% else %}
-            <em>{{ 'sylius_grid_import_export.ui.no_output'|trans }}</em>
+            <em>{{ 'sylius_import_export.ui.no_output'|trans }}</em>
         {% endif %}
     </div>
 </div>

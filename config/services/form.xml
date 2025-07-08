@@ -6,15 +6,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
     <parameters>
-        <parameter key="sylius_import_export.export.form_class">Sylius\GridImportExport\Form\Type\ExportResourceType</parameter>
+        <parameter key="sylius_import_export.export.form_class">Sylius\ImportExport\Form\Type\ExportResourceType</parameter>
     </parameters>
 
     <services>
-        <service id="sylius_import_export.form.choice_loader.export_formats" class="Sylius\GridImportExport\Form\ChoiceLoader\ExportFormatsChoiceLoader">
+        <service id="sylius_import_export.form.choice_loader.export_formats" class="Sylius\ImportExport\Form\ChoiceLoader\ExportFormatsChoiceLoader">
             <argument type="tagged_iterator" tag="sylius.grid_import_export.exporter" index-by="format" />
         </service>
 
-        <service id="sylius_import_export.form.type.export" class="Sylius\GridImportExport\Form\Type\ExportResourceType">
+        <service id="sylius_import_export.form.type.export" class="Sylius\ImportExport\Form\Type\ExportResourceType">
             <argument type="service" id="sylius_import_export.form.choice_loader.export_formats" />
 
             <tag name="form.type" />

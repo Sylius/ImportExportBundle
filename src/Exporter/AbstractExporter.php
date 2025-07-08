@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Sylius\GridImportExport\Exporter;
+namespace Sylius\ImportExport\Exporter;
 
 abstract class AbstractExporter implements ExporterInterface
 {

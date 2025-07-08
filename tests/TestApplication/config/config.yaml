@@ -1,15 +1,15 @@
 imports:
-    - { resource: "@SyliusGridImportExportBundle/config/config.yaml" }
+    - { resource: "@SyliusImportExportBundle/config/config.yaml" }
     - { resource: "services_test.php" }
 
 parameters:
-    sylius_grid_import_export.export_files_directory: '%kernel.project_dir%/../../../etc/export'
+    sylius_import_export.export_files_directory: '%kernel.project_dir%/../../../etc/export'
 
 twig:
     paths:
         '%kernel.project_dir%/../../../tests/TestApplication/templates': ~
 
-sylius_grid_import_export:
+sylius_import_export:
     export:
         default_provider: 'sylius_import_export.provider.resource_data.grid'
         default_section: 'admin'
@@ -22,4 +22,4 @@ sylius_grid_import_export:
             sylius.promotion: ~
             sylius.product: ~
             sylius.shipment: ~
-            sylius_grid_import_export.process: ~
+            sylius_import_export.process: ~
