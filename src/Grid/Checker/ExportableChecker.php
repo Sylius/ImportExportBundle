@@ -32,15 +32,15 @@ final readonly class ExportableChecker implements ExportableCheckerInterface
             return false;
         }
 
-        if (null === $section) {
-            return true;
-        }
-
         $resourceAlias = $this->resourceRegistry->getByClass($resourceClass)->getAlias();
 
         $resourceConfig = $this->exportResourcesConfig[$resourceAlias] ?? false;
         if (false === $resourceConfig) {
             return false;
+        }
+
+        if (null === $section) {
+            return true;
         }
 
         foreach ($resourceConfig['sections'] as $configSection) {
