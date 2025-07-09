@@ -26,6 +26,7 @@
             <argument type="service" id="sylius_import_export.provider.resource_identifier" />
             <argument type="service" id="sylius.grid.chain_provider" />
             <argument type="service" id="sylius.grid.data_source_provider" />
+            <argument type="service" id="serializer" />
 
             <tag name="sylius_import_export.resource_data_provider" />
         </service>
@@ -47,6 +48,12 @@
 
         <service id="sylius_import_export.provider.resources_ids.static" class="Sylius\ImportExport\Provider\ResourceIds\StaticResourceIdsProvider">
             <tag name="sylius_import_export.resource_ids_provider" priority="512" />
+        </service>
+
+        <service id="sylius_import_export.provider.grid_export_parameters" class="Sylius\ImportExport\Provider\Parameters\GridExportParametersProvider">
+            <argument type="service" id="sylius.grid.chain_provider" />
+            <argument type="service" id="sylius.resource_controller.parameters_parser" />
+            <argument>%sylius_import_export.export.resources%</argument>
         </service>
     </services>
 </container>

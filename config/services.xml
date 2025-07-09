@@ -68,9 +68,8 @@
 
         <service id="sylius_import_export.controller.export_action" class="Sylius\ImportExport\Controller\ExportAction" public="true">
             <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="sylius.grid.chain_provider" />
-            <argument type="service" id="sylius.resource_controller.parameters_parser" />
             <argument type="service" id="sylius_import_export.provider.resources_ids" />
+            <argument type="service" id="sylius_import_export.provider.grid_export_parameters" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="sylius.command_bus" />
             <argument>%sylius_import_export.export.form_class%</argument>
@@ -99,5 +98,9 @@
         </service>
 
         <service id="sylius_import_export.menu.reorder" class="Sylius\ImportExport\Menu\MenuReorder" />
+
+        <service id="sylius_import_export.export.doctrine.orm.query_extension.composite" class="Sylius\ImportExport\Doctrine\ORM\CompositeQueryExtension">
+            <argument type="tagged_iterator" tag="sylius_import_export.export.query_extension" />
+        </service>
     </services>
 </container>
