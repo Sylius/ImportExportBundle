@@ -5,3 +5,8 @@ sylius_resource:
             classes:
                 model: Sylius\ImportExport\Entity\ExportProcess
                 interface: Sylius\ImportExport\Entity\ExportProcessInterface
+        sylius_import_export.process_import:
+            driver: doctrine/orm
+            classes:
+                model: Sylius\ImportExport\Entity\ImportProcess
+                interface: Sylius\ImportExport\Entity\ImportProcessInterface

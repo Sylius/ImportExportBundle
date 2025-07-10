@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Factory;
 
 use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Entity\ProcessInterface;
 use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
+use Sylius\ImportExport\Messenger\Command\CreateImportProcess;
 use Sylius\Resource\Factory\FactoryInterface;
 
 /** @extends FactoryInterface<ProcessInterface> */
 interface ProcessFactoryInterface extends FactoryInterface
 {
     public function createExportProcess(CreateExportProcess $command): ExportProcessInterface;
+
+    public function createImportProcess(CreateImportProcess $command): ImportProcessInterface;
 }

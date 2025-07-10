@@ -32,6 +32,7 @@ final readonly class AdminImportExportMenuListener
             ->setLabelAttribute('icon', 'tabler:arrows-left-right')
         ;
 
+        $this->addImportItem($exportSection);
         $this->addExportItem($exportSection);
 
         $this->menuReorder->reorder($menu, 'import_export', 'marketing');
@@ -40,10 +41,20 @@ final readonly class AdminImportExportMenuListener
     public function addExportItem(ItemInterface $item): void
     {
         $item
-            ->addChild('processes', [
+            ->addChild('exports', [
                 'route' => 'sylius_import_export_admin_process_export_index',
             ])
-            ->setLabel('sylius_import_export.ui.process_exports')
+            ->setLabel('sylius_import_export.ui.exports')
+        ;
+    }
+
+    public function addImportItem(ItemInterface $item): void
+    {
+        $item
+            ->addChild('imports', [
+                'route' => 'sylius_import_export_admin_process_import_index',
+            ])
+            ->setLabel('sylius_import_export.ui.imports')
         ;
     }
 }

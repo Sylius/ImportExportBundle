@@ -38,3 +38,27 @@ sylius_import_export_admin_process_export_download:
         _sylius:
             section: admin
             permission: true
+
+sylius_import_export_admin_process_import:
+    resource: |
+        alias: sylius_import_export.process_import
+        section: admin
+        templates: "@SyliusAdmin\\shared\\crud"
+        except: ['show', 'create', 'update']
+        redirect: index
+        grid: sylius_import_export_admin_process_import
+        permission: true
+        path: /import-export/imports
+    type: sylius.resource
+
+sylius_import_export_admin_process_import_show:
+    path: /import-export/imports/{id}
+    methods: [ GET ]
+    defaults:
+        _controller: sylius_import_export.controller.process_import::showAction
+        _sylius:
+            section: admin
+            template: '@SyliusAdmin/shared/crud/show.html.twig'
+            permission: true
+            vars:
+                hook_prefix: 'sylius_import_export.admin.process_import'

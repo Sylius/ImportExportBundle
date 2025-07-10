@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+>
+    <mapped-superclass name="Sylius\ImportExport\Entity\ImportProcess" table="sylius_import_export_process_import">
+        <id name="uuid" column="uuid" type="string">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="status" column="status" type="string" />
+        <field name="resource" column="resource" type="string" />
+        <field name="format" column="format" type="string" />
+        <field name="filePath" column="file_path" type="string" />
+        <field name="parameters" column="parameters" type="json" />
+        <field name="batchesCount" column="batches_count" type="integer" />
+        <field name="importedCount" column="imported_count" type="integer" />
+        <field name="temporaryDataStorage" column="temporary_data_storage" type="string" nullable="true" />
+        <field name="output" column="output" type="text" nullable="true" />
+        <field name="errorMessage" column="error_message" type="text" nullable="true" />
+        <field name="createdAt" column="created_at" type="datetime">
+            <gedmo:timestampable on="create" />
+        </field>
+        <field name="updatedAt" column="updated_at" type="datetime">
+            <gedmo:timestampable on="update" />
+        </field>
+    </mapped-superclass>
+</doctrine-mapping>
