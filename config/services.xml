@@ -99,8 +99,13 @@
 
         <service id="sylius_import_export.menu.reorder" class="Sylius\ImportExport\Menu\MenuReorder" />
 
-        <service id="sylius_import_export.export.doctrine.orm.query_extension.composite" class="Sylius\ImportExport\Doctrine\ORM\CompositeQueryExtension">
-            <argument type="tagged_iterator" tag="sylius_import_export.export.query_extension" />
+        <service
+            id="sylius_import_export.normalizer.item"
+            class="Sylius\ImportExport\Serializer\ExportAwareItemNormalizer"
+            decorates="api_platform.serializer.normalizer.item"
+            parent="api_platform.serializer.normalizer.item"
+        >
+            <argument type="service" id=".inner" />
         </service>
     </services>
 </container>
