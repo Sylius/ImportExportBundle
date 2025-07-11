@@ -60,7 +60,7 @@ final class GridResourceDataProvider implements ResourceDataProviderInterface
         /** @phpstan-ignore-next-line */
         return $this->serializer->normalize($rawData, context: [
             ExportAwareItemNormalizer::EXPORT_CONTEXT_KEY => true,
-            'groups' => $parameters['serialization_groups'], [DefaultSerializationGroups::EXPORT_GROUP],
+            'groups' => $parameters['serialization_groups'] ?? [DefaultSerializationGroups::EXPORT_GROUP],
         ]);
     }
 }

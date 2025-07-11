@@ -59,7 +59,7 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                                 ->children()
                                     ->scalarNode('serialization_group')
-                                        ->isRequired()
+                                        ->cannotBeEmpty()
                                         ->defaultValue(DefaultSerializationGroups::EXPORT_GROUP)
                                     ->end()
                                     ->scalarNode('provider')

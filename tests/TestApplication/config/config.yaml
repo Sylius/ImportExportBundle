@@ -1,6 +1,5 @@
 imports:
     - { resource: "@SyliusImportExportBundle/config/config.yaml" }
-    - { resource: "services_test.php" }
 
 parameters:
     sylius_import_export.export_files_directory: '%kernel.project_dir%/../../../etc/export'
@@ -8,6 +7,12 @@ parameters:
 twig:
     paths:
         '%kernel.project_dir%/../../../tests/TestApplication/templates': ~
+
+framework:
+    serializer:
+        enable_attributes: true
+        mapping:
+            paths: ['%kernel.project_dir%/../../../tests/TestApplication/src/Entity']
 
 sylius_import_export:
     export:
@@ -23,3 +28,41 @@ sylius_import_export:
             sylius.product: ~
             sylius.shipment: ~
             sylius_import_export.process: ~
+            sylius_import_export.test_dummy: ~
+
+sylius_resource:
+    resources:
+        sylius_import_export.test_dummy:
+            driver: doctrine/orm
+            classes:
+                model: Tests\Sylius\ImportExport\Entity\Dummy
+
+sylius_grid:
+    grids:
+        test_dummy:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: Tests\Sylius\ImportExport\Entity\Dummy
+            sorting:
+                uuid: asc
+            fields:
+                text:
+                    type: string
+                counter:
+                    type: string
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    TestApp:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/../../../tests/TestApplication/src/Entity'
+                        prefix: Tests\Sylius\ImportExport
+
+when@test_minimal:
+    framework:
+        test: ~

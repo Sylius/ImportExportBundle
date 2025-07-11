@@ -9,6 +9,8 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
         __DIR__ . '/src',
+        __DIR__ . '/tests/Functional',
+        __DIR__ . '/tests/TestApplication/src',
     ]);
 
     $ecsConfig->import('vendor/sylius-labs/coding-standard/ecs.php');

@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.5/phpunit.xsd"
-         colors="true"
-         bootstrap="tests/Application/config/bootstrap.php">
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.5/phpunit.xsd"
+    colors="true"
+    bootstrap="vendor/sylius/test-application/config/bootstrap.php"
+>
     <testsuites>
-        <testsuite name="AcmeSyliusExamplePlugin Test Suite">
-            <directory>tests/Integration</directory>
-            <directory>tests/Api</directory>
-            <directory>tests/Unit</directory>
+        <testsuite name="functional">
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
 
     <php>
         <ini name="error_reporting" value="-1" />
 
-        <server name="KERNEL_CLASS_PATH" value="/tests/Application/Kernel.php" />
+        <server name="KERNEL_CLASS" value="Sylius\TestApplication\Kernel" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
-        <env name="APP_ENV" value="test"/>
+
+        <env name="APP_ENV" value="test_minimal" />
         <env name="SHELL_VERBOSITY" value="-1" />
     </php>
 </phpunit>
