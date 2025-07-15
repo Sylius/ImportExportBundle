@@ -2,13 +2,18 @@ sylius_import_export:
     grid:
         form:
             export: Export
+            import: Import
             format: Format
+            file_path: File Path
     ui:
         export: "Export"
+        import: "Import"
         import_export: "Import / export"
         processes: "Processes"
         process_exports: "Exports"
+        process_imports: "Imports"
         process_export: "Export"
+        process_import: "Import"
         resource: "Resource"
         format: "Format"
         process: "Process"
@@ -16,6 +21,10 @@ sylius_import_export:
         no_output: "No Output"
         file_not_ready: "File not ready for download"
         export_failed: "Export failed"
+        import_failed: "Import failed"
+        import_started: "Import started successfully"
+        import_form_invalid: "Import form is invalid"
+        imported_count: "Imported Count"
         processing: "Processing..."
         download: "Download export file"
         type:

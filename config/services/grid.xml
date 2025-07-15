@@ -27,5 +27,13 @@
 
             <tag name="kernel.event_listener" event="sylius.grid.common" method="addExportActions" />
         </service>
+
+        <service id="sylius_import_export.grid.listener.admin.import_action" class="Sylius\ImportExport\Grid\Listener\ImportActionAdminGridListener">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="sylius.section_resolver.uri_based" on-invalid="null" />
+            <argument type="service" id="sylius_import_export.grid.checker.exportable" />
+
+            <tag name="kernel.event_listener" event="sylius.grid.common" method="addImportActions" />
+        </service>
     </services>
 </container>

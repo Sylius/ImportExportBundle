@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sylius_import_export.denormalizer.entity_relation" class="Sylius\ImportExport\Denormalizer\EntityRelationDenormalizer">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <tag name="serializer.normalizer" priority="64" />
+        </service>
+
+        <service id="sylius_import_export.denormalizer.default_resource" class="Sylius\ImportExport\Denormalizer\DefaultResourceDenormalizer">
+            <argument type="service" id="serializer" />
+        </service>
+        <service id="Sylius\ImportExport\Denormalizer\ResourceDenormalizerInterface" alias="sylius_import_export.denormalizer.default_resource" />
+
+        <service id="sylius_import_export.denormalizer.registry" class="Sylius\ImportExport\Denormalizer\DenormalizerRegistry">
+            <argument type="service" id="sylius_import_export.denormalizer.default_resource" />
+            <argument type="tagged_iterator" tag="sylius_import_export.resource_denormalizer" />
+        </service>
+        <service id="Sylius\ImportExport\Denormalizer\DenormalizerRegistryInterface" alias="sylius_import_export.denormalizer.registry" />
+    </services>
+</container>

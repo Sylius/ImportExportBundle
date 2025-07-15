@@ -6,6 +6,9 @@
     }
 %}
 
-<span class="badge {{ viewOptions[data]['color'] }}">
-    {{ data }}
+{% set status = data ?: 'unknown' %}
+{% set color = viewOptions[status]['color'] ?: 'bg-gray-lt' %}
+
+<span class="badge {{ color }}">
+    {{ status }}
 </span>

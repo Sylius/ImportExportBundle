@@ -28,6 +28,8 @@
         "symfony/dependency-injection": "^6.4 || ^7.3",
         "symfony/framework-bundle": "^6.4 || ^7.3",
         "symfony/messenger": "^6.4 || ^7.3",
+        "symfony/property-access": "^6.4 || ^7.3",
+        "symfony/serializer": "^6.4 || ^7.3",
         "symfony/ux-live-component": "^2.12",
         "symfony/uid": "^6.4 || ^7.3"
     },

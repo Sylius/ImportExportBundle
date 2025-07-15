@@ -7,6 +7,7 @@
 >
     <parameters>
         <parameter key="sylius_import_export.export.form_class">Sylius\ImportExport\Form\Type\ExportResourceType</parameter>
+        <parameter key="sylius_import_export.import.form_class">Sylius\ImportExport\Form\Type\ImportResourceType</parameter>
     </parameters>
 
     <services>
@@ -16,6 +17,12 @@
 
         <service id="sylius_import_export.form.type.export" class="Sylius\ImportExport\Form\Type\ExportResourceType">
             <argument type="service" id="sylius_import_export.form.choice_loader.export_formats" />
+
+            <tag name="form.type" />
+        </service>
+
+        <service id="sylius_import_export.form.type.import" class="Sylius\ImportExport\Form\Type\ImportResourceType">
+            <argument>%kernel.project_dir%</argument>
 
             <tag name="form.type" />
         </service>

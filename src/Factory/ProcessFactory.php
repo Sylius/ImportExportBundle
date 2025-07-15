@@ -14,16 +14,22 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Factory;
 
 use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Entity\ProcessInterface;
 use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
+use Sylius\ImportExport\Messenger\Command\CreateImportProcess;
 use Sylius\Resource\Factory\FactoryInterface;
 use Symfony\Component\Uid\Uuid;
 
 final readonly class ProcessFactory implements ProcessFactoryInterface
 {
-    /** @param FactoryInterface<ExportProcessInterface> $exportFactory */
+    /**
+     * @param FactoryInterface<ExportProcessInterface> $exportFactory
+     * @param FactoryInterface<ImportProcessInterface> $importFactory
+     */
     public function __construct(
         private FactoryInterface $exportFactory,
+        private FactoryInterface $importFactory,
     ) {
     }
 
@@ -40,6 +46,19 @@ final readonly class ProcessFactory implements ProcessFactoryInterface
         $process->setFormat($command->format);
         $process->setParameters($command->parameters);
         $process->setResourceIds($command->resourceIds);
+        $process->setStatus('processing');
+
+        return $process;
+    }
+
+    public function createImportProcess(CreateImportProcess $command): ImportProcessInterface
+    {
+        $process = $this->importFactory->createNew();
+        $process->setUuid(Uuid::v7()->toRfc4122());
+        $process->setResource($command->resource);
+        $process->setFormat($command->format);
+        $process->setFilePath($command->filePath);
+        $process->setParameters($command->parameters);
         $process->setStatus('processing');
 
         return $process;
