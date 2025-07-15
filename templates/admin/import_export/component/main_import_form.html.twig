@@ -12,18 +12,17 @@
     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         {{ 'sylius_import_export.ui.import'|trans }}
     </button>
-    <div class="dropdown-menu p-4">
+    <div class="dropdown-menu p-4" style="min-width: 300px;">
         {{ form_start(form, {'action': path('sylius_import_export.admin.resource.import', import_parameters), 'attr': {'novalidate': 'novalidate'}}) }}
 
         <div class="mb-3">
-            {{ form_row(form.format) }}
+            {{ form_row(form.file) }}
         </div>
 
         <div class="d-flex justify-content-end">
             {{ button.primary({'type': 'submit', 'text': 'sylius_import_export.ui.import'|trans}) }}
         </div>
 
-        {{ form_widget(form.filePath) }}
         {{ form_widget(form.resourceClass) }}
         {{ form_row(form._token) }}
         {{ form_end(form, {'render_rest': false}) }}

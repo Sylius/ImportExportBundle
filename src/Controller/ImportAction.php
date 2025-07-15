@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Controller;
 
 use Sylius\ImportExport\Messenger\Command\CreateImportProcess;
+use Sylius\ImportExport\Uploader\ImportFileUploader;
+use Sylius\Resource\Metadata\RegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +30,8 @@ final readonly class ImportAction
         private FormFactoryInterface $formFactory,
         private MessageBusInterface $commandBus,
         private string $importForm,
+        private ImportFileUploader $importFileUploader,
+        private RegistryInterface $metadataRegistry,
     ) {
     }
 
@@ -39,27 +44,43 @@ final readonly class ImportAction
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            $session->getFlashBag()->add('error', 'sylius_import_export.import_form_invalid');
+            if ($form->isSubmitted()) {
+                $errors = [];
+                foreach ($form->getErrors(true) as $error) {
+                    $errors[] = $error->getMessage();
+                }
+                $errorMessage = !empty($errors) ? implode(', ', $errors) : 'sylius_import_export.import_form_invalid';
+                $session->getFlashBag()->add('error', $errorMessage);
+            } else {
+                $session->getFlashBag()->add('error', 'sylius_import_export.import_form_invalid');
+            }
 
             return new RedirectResponse($request->headers->get('referer') ?? '/');
         }
 
         $data = $form->getData();
-        $format = $data['format'];
-        $filePath = $data['filePath'];
         $resourceClass = $data['resourceClass'];
 
+        /** @var UploadedFile $file */
+        $file = $data['file'];
+
         try {
+            $format = $this->importFileUploader->getFormatFromMimeType($file->getMimeType());
+            $filePath = $this->importFileUploader->upload($file);
+
+            $metadata = $this->metadataRegistry->getByClass($resourceClass);
+            $resourceAlias = $metadata->getAlias();
+
             $this->commandBus->dispatch(new CreateImportProcess(
-                resource: $resourceClass,
+                resource: $resourceAlias,
                 format: $format,
                 filePath: $filePath,
                 parameters: [],
             ));
 
             $session->getFlashBag()->add('success', 'sylius_import_export.import_started');
-        } catch (\Throwable) {
-            $session->getFlashBag()->add('error', 'sylius_import_export.import_failed');
+        } catch (\Throwable $e) {
+            $session->getFlashBag()->add('error', 'sylius_import_export.upload_failed');
         }
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');

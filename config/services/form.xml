@@ -22,8 +22,9 @@
         </service>
 
         <service id="sylius_import_export.form.type.import" class="Sylius\ImportExport\Form\Type\ImportResourceType">
-            <argument>%kernel.project_dir%</argument>
-
+            <argument>%sylius_import_export.import.file_max_size%</argument>
+            <argument>%sylius_import_export.import.allowed_mime_types%</argument>
+            
             <tag name="form.type" />
         </service>
     </services>

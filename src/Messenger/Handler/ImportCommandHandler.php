@@ -19,6 +19,7 @@ use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Exception\ImportFailedException;
 use Sylius\ImportExport\Messenger\Command\ImportCommand;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Metadata\RegistryInterface;
 
 class ImportCommandHandler
 {
@@ -27,6 +28,7 @@ class ImportCommandHandler
         protected RepositoryInterface $processRepository,
         protected DenormalizerRegistryInterface $denormalizerRegistry,
         protected EntityManagerInterface $entityManager,
+        protected RegistryInterface $metadataRegistry,
     ) {
     }
 
@@ -39,7 +41,8 @@ class ImportCommandHandler
 
         try {
             $importedCount = 0;
-            $resourceClass = $process->getResource();
+            $resourceMetadata = $this->metadataRegistry->get($process->getResource());
+            $resourceClass = $resourceMetadata->getClass('model');
             $denormalizer = $this->denormalizerRegistry->get($resourceClass);
 
             foreach ($command->batchData as $recordData) {

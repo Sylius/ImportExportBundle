@@ -57,6 +57,7 @@
             <argument type="service" id="sylius_import_export.repository.process_import" />
             <argument type="service" id="sylius_import_export.denormalizer.registry" />
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sylius.resource_registry" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
         </service>
@@ -100,10 +101,16 @@
             <tag name="controller.service_arguments" />
         </service>
 
+        <service id="sylius_import_export.uploader.import_file" class="Sylius\ImportExport\Uploader\ImportFileUploader">
+            <argument>%sylius_import_export.import_files_directory%</argument>
+        </service>
+
         <service id="sylius_import_export.controller.import_action" class="Sylius\ImportExport\Controller\ImportAction" public="true">
             <argument type="service" id="form.factory" />
             <argument type="service" id="sylius.command_bus" />
             <argument>%sylius_import_export.import.form_class%</argument>
+            <argument type="service" id="sylius_import_export.uploader.import_file" />
+            <argument type="service" id="sylius.resource_registry" />
 
             <tag name="controller.service_arguments" />
         </service>

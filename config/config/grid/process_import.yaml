@@ -29,3 +29,12 @@ sylius_grid:
                 item:
                     show:
                         type: show
+                    delete:
+                        type: delete
+                        options:
+                            enabled: "resource.status in ['success', 'failed', 'cancelled']"
+                bulk:
+                    delete:
+                        type: delete
+                        options:
+                            enabled: "resource.status in ['success', 'failed', 'cancelled']"
