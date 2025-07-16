@@ -20,6 +20,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Sylius\ImportExport\Serializer\DefaultSerializationGroups;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[Entity]
 #[ORM\Table(name: 'sylius_test_dummy')]
@@ -33,10 +34,12 @@ class Dummy implements ResourceInterface
 
     #[ORM\Column(name: 'text')]
     #[Groups(DefaultSerializationGroups::EXPORT_GROUP)]
+    #[Assert\NotBlank]
     private string $text;
 
     #[ORM\Column(name: 'counter', type: 'integer')]
     #[Groups(DefaultSerializationGroups::EXPORT_GROUP)]
+    #[Assert\PositiveOrZero]
     private int $counter;
 
     #[ORM\Column(name: 'config', type: 'json')]

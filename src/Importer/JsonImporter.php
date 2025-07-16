@@ -14,10 +14,16 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Importer;
 
 use Sylius\ImportExport\Exception\ImportFailedException;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 final class JsonImporter implements ImporterInterface
 {
     public const FORMAT = 'json';
+
+    public function __construct(
+        private JsonEncoder $jsonEncoder,
+    ) {
+    }
 
     public function getConfig(): array
     {
@@ -35,7 +41,7 @@ final class JsonImporter implements ImporterInterface
                 throw new \InvalidArgumentException();
             }
 
-            return json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+            return $this->jsonEncoder->decode($content, self::FORMAT);
         } catch (\Throwable $exception) {
             throw new ImportFailedException(sprintf('Failed to import from "%s": %s', $filePath, $exception->getMessage()));
         }

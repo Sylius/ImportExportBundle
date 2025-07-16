@@ -41,7 +41,6 @@ final readonly class ImportActionAdminGridListener
             return;
         }
 
-        // For now, use same logic as export to determine if import is allowed
         if (
             !$this->exportableChecker->canBeExported($grid, $this->sectionProvider?->getSection()) &&
             !$this->exportableChecker->canBeExported($grid, $this->getRouteSection())
@@ -49,7 +48,6 @@ final readonly class ImportActionAdminGridListener
             return;
         }
 
-        // Add import action only to main group for now
         $this->addInActionGroup($grid, ActionGroupInterface::MAIN_GROUP);
     }
 

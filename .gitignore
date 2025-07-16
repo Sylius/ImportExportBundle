@@ -1,7 +1,7 @@
 /vendor/
+/var/
 /node_modules/
 /composer.lock
-/drivers/
 
 /etc/build/*
 !/etc/build/.gitignore
@@ -12,5 +12,5 @@
 /tests/TestApplication/.env.*.local
 
 /.phpunit.result.cache
-/behat.yml
+/behat.yaml
 /phpunit.xml

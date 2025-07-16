@@ -25,7 +25,6 @@ final class SyliusImportExportExtension extends Extension
         $configuration = $this->processConfiguration(new Configuration(), $configs);
 
         $this->processExportConfig($container, $configuration);
-        $this->processFormConfig($container);
 
         $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config/'));
         $loader->load('services.xml');
@@ -47,10 +46,10 @@ final class SyliusImportExportExtension extends Extension
 
         $container->setParameter('sylius_import_export.export.default_provider', $defaultProvider);
         $container->setParameter('sylius_import_export.export.resources', $config['export']['resources']);
-    }
-
-    private function processFormConfig(ContainerBuilder $container): void
-    {
         $container->setParameter('sylius_import_export.export_files_directory', '%kernel.project_dir%/var/export');
+        $container->setParameter('sylius_import_export.import_files_directory', '%kernel.project_dir%/var/import');
+
+        $container->setParameter('sylius_import_export.import.file_max_size', '50M');
+        $container->setParameter('sylius_import_export.import.allowed_mime_types', ['application/json']);
     }
 }

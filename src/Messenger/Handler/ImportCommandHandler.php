@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Messenger\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sylius\ImportExport\Denormalizer\DenormalizerRegistryInterface;
 use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Exception\ImportFailedException;
+use Sylius\ImportExport\Exception\ValidationFailedException;
 use Sylius\ImportExport\Messenger\Command\ImportCommand;
+use Sylius\ImportExport\Processor\BatchProcessor;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 class ImportCommandHandler
@@ -25,8 +26,8 @@ class ImportCommandHandler
     /** @param RepositoryInterface<ImportProcessInterface> $processRepository */
     public function __construct(
         protected RepositoryInterface $processRepository,
-        protected DenormalizerRegistryInterface $denormalizerRegistry,
         protected EntityManagerInterface $entityManager,
+        protected BatchProcessor $batchProcessor,
     ) {
     }
 
@@ -38,18 +39,7 @@ class ImportCommandHandler
         }
 
         try {
-            $importedCount = 0;
-            $resourceClass = $process->getResource();
-            $denormalizer = $this->denormalizerRegistry->get($resourceClass);
-
-            foreach ($command->batchData as $recordData) {
-                $entity = $denormalizer->denormalize($recordData, $resourceClass);
-                $this->entityManager->persist($entity);
-
-                ++$importedCount;
-            }
-
-            $this->entityManager->flush();
+            $importedCount = $this->batchProcessor->processBatch($process, $command->batchData);
 
             $process->setBatchesCount($process->getBatchesCount() - 1);
             $process->setImportedCount($process->getImportedCount() + $importedCount);
@@ -57,6 +47,14 @@ class ImportCommandHandler
             if ($process->getBatchesCount() <= 0) {
                 $process->setStatus('success');
             }
+        } catch (ValidationFailedException $e) {
+            $this->entityManager->clear();
+            $process = $this->processRepository->find($command->processId);
+            if (null === $process) {
+                throw new ImportFailedException(sprintf('Process with uuid "%s" not found after validation failure.', $command->processId));
+            }
+            $process->setStatus('failed');
+            $process->setErrorMessage($e->getMessage());
         } catch (\Throwable $e) {
             $process->setStatus('failed');
             $process->setErrorMessage($e->getMessage());

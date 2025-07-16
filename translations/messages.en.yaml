@@ -5,9 +5,12 @@ sylius_import_export:
             import: Import
             format: Format
             file_path: File Path
+            file: File
     ui:
         export: "Export"
         import: "Import"
+        imports: "Imports"
+        exports: "Exports"
         import_export: "Import / export"
         processes: "Processes"
         process_exports: "Exports"
@@ -22,6 +25,7 @@ sylius_import_export:
         file_not_ready: "File not ready for download"
         export_failed: "Export failed"
         import_failed: "Import failed"
+        upload_failed: "Upload failed"
         import_started: "Import started successfully"
         import_form_invalid: "Import form is invalid"
         imported_count: "Imported Count"
@@ -30,3 +34,9 @@ sylius_import_export:
         type:
             export: "Export"
             import: "Import"
+    validation:
+        import:
+            file:
+                not_blank: "Please select a file to upload."
+                invalid_type: "Please upload a valid JSON file."
+                max_size: "The file is too large. Maximum size allowed is {{ limit }}."
