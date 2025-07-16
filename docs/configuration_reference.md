@@ -52,3 +52,42 @@ sylius_import_export:
                     - ...
                 
 ```
+
+### Import
+
+Minimal resource configuration:
+
+```yaml
+sylius_import_export:
+    import:
+        resources:
+            app.brand: ~
+```
+
+Full resource configuration:
+
+```yaml
+sylius_import_export:
+    import:
+        resources:
+            app.brand:
+                validation_groups: ['Default', 'import']
+```
+
+Reference:
+
+```yaml
+sylius_import_export:
+    import:
+        # Directory where uploaded import files are stored; defaults to '%kernel.project_dir%/var/import'
+        files_directory: <string>
+        # Maximum file size for uploads; defaults to '50M'
+        file_max_size: <string>
+        # Allowed MIME types for import files; defaults to ['application/json']
+        allowed_mime_types: [<string>, ...]
+        resources:
+            # The alias of a resource as configured within the ResourceBundle
+            <resource_alias>:
+                # Validation groups to use during import validation; defaults to ['Default']
+                validation_groups: [<string>, ...]
+```
