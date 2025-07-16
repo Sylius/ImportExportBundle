@@ -1,0 +1,6 @@
+{% set resource = hookable_metadata.context.resource %}
+
+<div class="row">
+    <div class="col-12 col-md-4 fw-bold">{{ 'sylius.ui.status'|trans }}</div>
+    <div class="col-12 col-md-8">{% include '@SyliusImportExport/admin/import_export/grid/field/status.html.twig' with {'data': resource.status} %}</div>
+</div>

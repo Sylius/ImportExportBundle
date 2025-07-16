@@ -1,0 +1,12 @@
+{% set resource = hookable_metadata.context.resource %}
+
+{% if resource.errorMessage %}
+<div class="row">
+    <div class="col-12 col-md-4 fw-bold">{{ 'sylius_import_export.ui.error_message'|trans }}</div>
+    <div class="col-12 col-md-8">
+        <div class="alert alert-danger mb-0">
+            {{ resource.errorMessage }}
+        </div>
+    </div>
+</div>
+{% endif %}

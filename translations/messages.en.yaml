@@ -29,6 +29,8 @@ sylius_import_export:
         import_started: "Import started successfully"
         import_form_invalid: "Import form is invalid"
         imported_count: "Imported Count"
+        file_path: "File Path"
+        error_message: "Error Message"
         processing: "Processing..."
         download: "Download export file"
         type:

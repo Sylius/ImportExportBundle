@@ -1,0 +1,47 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_import_export.admin.process_import.show.content':
+            sections:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections.html.twig'
+                priority: 0
+
+        'sylius_import_export.admin.process_import.show.content.sections':
+            general:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general.html.twig'
+                priority: 0
+
+        'sylius_import_export.admin.process_import.show.content.sections.general':
+            header:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/header.html.twig'
+                priority: 100
+            table:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/table.html.twig'
+                priority: 0
+
+        'sylius_import_export.admin.process_import.show.content.sections.general.header':
+            title:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/header/title.html.twig'
+                priority: 0
+
+        'sylius_import_export.admin.process_import.show.content.sections.general.table':
+            uuid:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/uuid.html.twig'
+                priority: 400
+            resource:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/resource.html.twig'
+                priority: 300
+            format:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/format.html.twig'
+                priority: 200
+            status:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/status.html.twig'
+                priority: 150
+            file_path:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/file_path.html.twig'
+                priority: 125
+            error_message:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/error_message.html.twig'
+                priority: 110
+            timestamps:
+                template: '@SyliusImportExport/admin/import_export/process_import/show/content/sections/general/timestamps.html.twig'
+                priority: 0
