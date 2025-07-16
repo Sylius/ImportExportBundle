@@ -28,6 +28,7 @@ final class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addExportConfiguration($rootNode);
+        $this->addImportConfiguration($rootNode);
 
         return $treeBuilder;
     }
@@ -74,6 +75,48 @@ final class Configuration implements ConfigurationInterface
                         ->end() // resources
                     ->end()
                 ->end() // export
+            ->end()
+        ;
+    }
+
+    private function addImportConfiguration(ArrayNodeDefinition $node): void
+    {
+        $node
+            ->children()
+                ->arrayNode('import')
+                    ->children()
+                        ->scalarNode('files_directory')
+                            ->defaultValue('%kernel.project_dir%/var/import')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('file_max_size')
+                            ->defaultValue('50M')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->arrayNode('allowed_mime_types')
+                            ->scalarPrototype()->end()
+                            ->defaultValue(['application/json'])
+                        ->end()
+                        ->arrayNode('resources')
+                            ->useAttributeAsKey('name')
+                            ->normalizeKeys(false)
+                            ->arrayPrototype()
+                                ->beforeNormalization()
+                                    ->ifNull()
+                                    ->then(function () {
+                                        return [];
+                                    })
+                                ->end()
+                                ->children()
+                                    ->arrayNode('validation_groups')
+                                        ->scalarPrototype()->end()
+                                        ->defaultValue(['Default'])
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end() // resources
+                    ->end()
+                ->end() // import
             ->end()
         ;
     }

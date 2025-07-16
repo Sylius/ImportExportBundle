@@ -20,7 +20,7 @@ use Sylius\Component\Grid\Definition\Action;
 use Sylius\Component\Grid\Definition\ActionGroup;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Event\GridDefinitionConverterEvent;
-use Sylius\ImportExport\Grid\Checker\ExportableCheckerInterface;
+use Sylius\ImportExport\Grid\Checker\ImportableCheckerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class ImportActionAdminGridListener
@@ -30,7 +30,7 @@ final readonly class ImportActionAdminGridListener
     public function __construct(
         private RequestStack $requestStack,
         private ?SectionProviderInterface $sectionProvider,
-        private ExportableCheckerInterface $exportableChecker, // Reuse for import checking
+        private ImportableCheckerInterface $importableChecker,
     ) {
     }
 
@@ -42,8 +42,8 @@ final readonly class ImportActionAdminGridListener
         }
 
         if (
-            !$this->exportableChecker->canBeExported($grid, $this->sectionProvider?->getSection()) &&
-            !$this->exportableChecker->canBeExported($grid, $this->getRouteSection())
+            !$this->importableChecker->canBeImported($grid, $this->sectionProvider?->getSection()) &&
+            !$this->importableChecker->canBeImported($grid, $this->getRouteSection())
         ) {
             return;
         }

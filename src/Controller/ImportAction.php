@@ -33,6 +33,7 @@ final readonly class ImportAction
         private string $importForm,
         private ImportFileUploader $importFileUploader,
         private RegistryInterface $metadataRegistry,
+        private array $importResources,
     ) {
     }
 
@@ -70,11 +71,16 @@ final readonly class ImportAction
             $metadata = $this->metadataRegistry->getByClass($resourceClass);
             $resourceAlias = $metadata->getAlias();
 
+            $parameters = [];
+            if (isset($this->importResources[$resourceAlias])) {
+                $parameters['validation_groups'] = $this->importResources[$resourceAlias]['validation_groups'] ?? ['Default'];
+            }
+
             $this->commandBus->dispatch(new CreateImportProcess(
                 resource: $resourceAlias,
                 format: $format,
                 filePath: $filePath,
-                parameters: [],
+                parameters: $parameters,
             ));
 
             $session->getFlashBag()->add('success', 'sylius_import_export.import_started');

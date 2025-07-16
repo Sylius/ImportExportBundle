@@ -11,6 +11,12 @@
             <argument>%sylius_import_export.export.resources%</argument>
         </service>
 
+        <service id="sylius_import_export.grid.checker.importable" class="Sylius\ImportExport\Grid\Checker\ImportableChecker">
+            <argument type="service" id="sylius.resource_registry" />
+            <argument>%sylius_import_export.import.resources%</argument>
+        </service>
+        <service id="Sylius\ImportExport\Grid\Checker\ImportableCheckerInterface" alias="sylius_import_export.grid.checker.importable" />
+
         <service
             id="sylius_import_export.grid.array_to_definition_converter.common_event_dispatching"
             class="Sylius\ImportExport\Grid\Definition\CommonEventDispatchingArrayToDefinitionConverter"
@@ -31,7 +37,7 @@
         <service id="sylius_import_export.grid.listener.admin.import_action" class="Sylius\ImportExport\Grid\Listener\ImportActionAdminGridListener">
             <argument type="service" id="request_stack" />
             <argument type="service" id="sylius.section_resolver.uri_based" on-invalid="null" />
-            <argument type="service" id="sylius_import_export.grid.checker.exportable" />
+            <argument type="service" id="sylius_import_export.grid.checker.importable" />
 
             <tag name="kernel.event_listener" event="sylius.grid.common" method="addImportActions" />
         </service>

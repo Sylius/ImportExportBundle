@@ -121,6 +121,7 @@
             <argument>%sylius_import_export.import.form_class%</argument>
             <argument type="service" id="sylius_import_export.uploader.import_file" />
             <argument type="service" id="sylius.resource_registry" />
+            <argument>%sylius_import_export.import.resources%</argument>
 
             <tag name="controller.service_arguments" />
         </service>

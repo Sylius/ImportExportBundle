@@ -25,6 +25,7 @@ final class SyliusImportExportExtension extends Extension
         $configuration = $this->processConfiguration(new Configuration(), $configs);
 
         $this->processExportConfig($container, $configuration);
+        $this->processImportConfig($container, $configuration);
 
         $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config/'));
         $loader->load('services.xml');
@@ -47,9 +48,28 @@ final class SyliusImportExportExtension extends Extension
         $container->setParameter('sylius_import_export.export.default_provider', $defaultProvider);
         $container->setParameter('sylius_import_export.export.resources', $config['export']['resources']);
         $container->setParameter('sylius_import_export.export_files_directory', '%kernel.project_dir%/var/export');
-        $container->setParameter('sylius_import_export.import_files_directory', '%kernel.project_dir%/var/import');
+    }
 
-        $container->setParameter('sylius_import_export.import.file_max_size', '50M');
-        $container->setParameter('sylius_import_export.import.allowed_mime_types', ['application/json']);
+    private function processImportConfig(ContainerBuilder $container, array &$config): void
+    {
+        if (!isset($config['import'])) {
+            $config['import'] = [];
+        }
+
+        $filesDirectory = $config['import']['files_directory'] ?? '%kernel.project_dir%/var/import';
+        $fileMaxSize = $config['import']['file_max_size'] ?? '50M';
+        $allowedMimeTypes = $config['import']['allowed_mime_types'] ?? ['application/json'];
+        $resources = $config['import']['resources'] ?? [];
+
+        foreach ($resources as &$resource) {
+            if (!isset($resource['validation_groups'])) {
+                $resource['validation_groups'] = ['Default'];
+            }
+        }
+
+        $container->setParameter('sylius_import_export.import_files_directory', $filesDirectory);
+        $container->setParameter('sylius_import_export.import.file_max_size', $fileMaxSize);
+        $container->setParameter('sylius_import_export.import.allowed_mime_types', $allowedMimeTypes);
+        $container->setParameter('sylius_import_export.import.resources', $resources);
     }
 }
