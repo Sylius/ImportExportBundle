@@ -18,15 +18,16 @@ use PHPUnit\Framework\Attributes\Test;
 use Sylius\ImportExport\Entity\ImportProcess;
 use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Messenger\Command\ImportCommand;
-use Sylius\ImportExport\Messenger\Handler\ImportCommandHandler;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\Uuid;
 use Tests\Sylius\ImportExport\Entity\Dummy;
 use Tests\Sylius\ImportExport\Functional\FunctionalTestCase;
 
 final class ImportHandlerTest extends FunctionalTestCase
 {
-    private ImportCommandHandler $handler;
+    private MessageBusInterface $commandBus;
 
     private string $importsDir;
 
@@ -36,7 +37,7 @@ final class ImportHandlerTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->handler = $this->getContainer()->get('sylius_import_export.messenger.command_handler.import');
+        $this->commandBus = $this->getContainer()->get('sylius_import_export.import.command_bus');
         $this->importsDir = $this->getContainer()->getParameter('sylius_import_export.import_files_directory');
         $this->processRepository = $this->getContainer()->get('sylius_import_export.repository.process_import');
 
@@ -63,7 +64,7 @@ final class ImportHandlerTest extends FunctionalTestCase
             [],
         );
 
-        $this->handler->__invoke(new ImportCommand($processUuid, $importData));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $importData));
 
         $dummyRepository = $this->entityManager->getRepository(Dummy::class);
         $importedDummies = $dummyRepository->findAll();
@@ -90,7 +91,7 @@ final class ImportHandlerTest extends FunctionalTestCase
         $processUuid = (string) Uuid::v7();
         $process = $this->createImportProcess($processUuid, 'json', '/tmp/test.json', []);
 
-        $this->handler->__invoke(new ImportCommand($processUuid, $importData));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $importData));
 
         $dummyRepository = $this->entityManager->getRepository(Dummy::class);
         $dummy = $dummyRepository->findOneBy(['uuid' => 'test-uuid-1']);
@@ -122,7 +123,7 @@ final class ImportHandlerTest extends FunctionalTestCase
         $processUuid = (string) Uuid::v7();
         $process = $this->createImportProcess($processUuid, 'json', '/tmp/test.json', []);
 
-        $this->handler->__invoke(new ImportCommand($processUuid, $importData));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $importData));
 
         $dummyRepository = $this->entityManager->getRepository(Dummy::class);
         $dummy = $dummyRepository->findOneBy(['uuid' => 'test-uuid-2']);
@@ -152,7 +153,7 @@ final class ImportHandlerTest extends FunctionalTestCase
             ['uuid' => 'batch1-1', 'text' => 'Batch 1 Item 1', 'counter' => 1, 'config' => []],
             ['uuid' => 'batch1-2', 'text' => 'Batch 1 Item 2', 'counter' => 2, 'config' => []],
         ];
-        $this->handler->__invoke(new ImportCommand($processUuid, $batchData1));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $batchData1));
 
         $this->entityManager->refresh($process);
         $this->assertSame(2, $process->getImportedCount());
@@ -162,7 +163,7 @@ final class ImportHandlerTest extends FunctionalTestCase
         $batchData2 = [
             ['uuid' => 'batch2-1', 'text' => 'Batch 2 Item 1', 'counter' => 3, 'config' => []],
         ];
-        $this->handler->__invoke(new ImportCommand($processUuid, $batchData2));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $batchData2));
 
         $this->entityManager->refresh($process);
         $this->assertSame(3, $process->getImportedCount());
@@ -172,7 +173,7 @@ final class ImportHandlerTest extends FunctionalTestCase
         $batchData3 = [
             ['uuid' => 'batch3-1', 'text' => 'Batch 3 Item 1', 'counter' => 4, 'config' => []],
         ];
-        $this->handler->__invoke(new ImportCommand($processUuid, $batchData3));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $batchData3));
 
         $this->entityManager->refresh($process);
         $this->assertSame(4, $process->getImportedCount());
@@ -204,9 +205,10 @@ final class ImportHandlerTest extends FunctionalTestCase
             ],
         ];
 
-        $this->handler->__invoke(new ImportCommand($processUuid, $invalidData));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $invalidData));
 
-        $process = $this->processRepository->find($processUuid);
+        $processRepository = $this->getContainer()->get('sylius_import_export.repository.process_import');
+        $process = $processRepository->find($processUuid);
         $this->assertSame('failed', $process->getStatus());
         $this->assertNotNull($process->getErrorMessage());
         $this->assertStringContainsString('Validation failed', $process->getErrorMessage());
@@ -232,7 +234,7 @@ final class ImportHandlerTest extends FunctionalTestCase
             ],
         ];
 
-        $this->handler->__invoke(new ImportCommand($processUuid, $importData));
+        $this->commandBus->dispatch(new ImportCommand($processUuid, $importData));
 
         $this->entityManager->refresh($process);
         $this->assertSame(1, $process->getImportedCount());
@@ -242,10 +244,10 @@ final class ImportHandlerTest extends FunctionalTestCase
     #[Test]
     public function it_handles_process_not_found_error(): void
     {
-        $this->expectException(\Sylius\ImportExport\Exception\ImportFailedException::class);
+        $this->expectException(HandlerFailedException::class);
         $this->expectExceptionMessage('Process with uuid "non-existent-uuid" not found.');
 
-        $this->handler->__invoke(new ImportCommand('non-existent-uuid', []));
+        $this->commandBus->dispatch(new ImportCommand('non-existent-uuid', []));
     }
 
     public static function getImportData(): array

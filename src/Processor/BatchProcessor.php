@@ -19,7 +19,7 @@ use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Validator\ImportValidator;
 use Sylius\Resource\Metadata\RegistryInterface;
 
-class BatchProcessor
+final readonly class BatchProcessor
 {
     public function __construct(
         private DenormalizerRegistryInterface $denormalizerRegistry,
@@ -35,7 +35,7 @@ class BatchProcessor
         $resourceMetadata = $this->metadataRegistry->get($process->getResource());
         $resourceClass = $resourceMetadata->getClass('model');
         $denormalizer = $this->denormalizerRegistry->get($resourceClass);
-        $validationGroups = $process->getParameters()['validation_groups'] ?? ['sylius_pricing_lists'];
+        $validationGroups = $process->getParameters()['validation_groups'] ?? ['sylius'];
 
         foreach ($batchData as $recordData) {
             $entity = $denormalizer->denormalize($recordData, $resourceClass);

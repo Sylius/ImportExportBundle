@@ -45,18 +45,14 @@ final readonly class ImportAction
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            if ($form->isSubmitted()) {
-                $errors = [];
-                foreach ($form->getErrors(true) as $error) {
-                    if ($error instanceof FormError) {
-                        $errors[] = $error->getMessage();
-                    }
+            $errors = [];
+            foreach ($form->getErrors(true) as $error) {
+                if ($error instanceof FormError) {
+                    $errors[] = $error->getMessage();
                 }
-                $errorMessage = !empty($errors) ? implode(', ', $errors) : 'sylius_import_export.import_form_invalid';
-                $session->getFlashBag()->add('error', $errorMessage);
-            } else {
-                $session->getFlashBag()->add('error', 'sylius_import_export.import_form_invalid');
             }
+            $errorMessage = !empty($errors) ? implode(', ', $errors) : 'sylius_import_export.import_form_invalid';
+            $session->getFlashBag()->add('error', $errorMessage);
 
             return new RedirectResponse($request->headers->get('referer') ?? '/');
         }

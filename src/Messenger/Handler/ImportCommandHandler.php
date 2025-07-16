@@ -47,9 +47,6 @@ class ImportCommandHandler
             if ($process->getBatchesCount() <= 0) {
                 $process->setStatus('success');
             }
-
-            $this->entityManager->persist($process);
-            $this->entityManager->flush();
         } catch (ValidationFailedException $e) {
             $this->entityManager->clear();
             $process = $this->processRepository->find($command->processId);
@@ -58,13 +55,9 @@ class ImportCommandHandler
             }
             $process->setStatus('failed');
             $process->setErrorMessage($e->getMessage());
-            $this->entityManager->persist($process);
-            $this->entityManager->flush();
         } catch (\Throwable $e) {
             $process->setStatus('failed');
             $process->setErrorMessage($e->getMessage());
-
-            $this->entityManager->flush();
         }
     }
 }
