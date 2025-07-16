@@ -83,7 +83,7 @@ final readonly class ImportAction
 
             $session->getFlashBag()->add('success', 'sylius_import_export.import_started');
         } catch (\Throwable $e) {
-            $session->getFlashBag()->add('error', 'sylius_import_export.upload_failed');
+            $session->getFlashBag()->add('error', 'sylius_import_export.failed');
         }
 
         return new RedirectResponse($request->headers->get('referer') ?? '/');

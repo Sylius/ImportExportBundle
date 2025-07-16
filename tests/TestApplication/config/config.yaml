@@ -66,4 +66,4 @@ doctrine:
 
 when@test_minimal:
     framework:
-        test: ~
+        test: true

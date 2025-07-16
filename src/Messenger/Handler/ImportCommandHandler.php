@@ -14,23 +14,20 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Messenger\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sylius\ImportExport\Denormalizer\DenormalizerRegistryInterface;
 use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Exception\ImportFailedException;
+use Sylius\ImportExport\Exception\ValidationFailedException;
 use Sylius\ImportExport\Messenger\Command\ImportCommand;
+use Sylius\ImportExport\Processor\BatchProcessor;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
-use Sylius\Resource\Metadata\RegistryInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ImportCommandHandler
 {
     /** @param RepositoryInterface<ImportProcessInterface> $processRepository */
     public function __construct(
         protected RepositoryInterface $processRepository,
-        protected DenormalizerRegistryInterface $denormalizerRegistry,
         protected EntityManagerInterface $entityManager,
-        protected RegistryInterface $metadataRegistry,
-        protected ValidatorInterface $validator,
+        protected BatchProcessor $batchProcessor,
     ) {
     }
 
@@ -42,32 +39,7 @@ class ImportCommandHandler
         }
 
         try {
-            $importedCount = 0;
-            $resourceMetadata = $this->metadataRegistry->get($process->getResource());
-            $resourceClass = $resourceMetadata->getClass('model');
-            $denormalizer = $this->denormalizerRegistry->get($resourceClass);
-
-            foreach ($command->batchData as $recordData) {
-                $entity = $denormalizer->denormalize($recordData, $resourceClass);
-
-                $validationGroups = $process->getParameters()['validation_groups'] ?? ['Default'];
-                $violations = $this->validator->validate($entity, groups: $validationGroups);
-
-                if (count($violations) > 0) {
-                    $errorMessages = [];
-                    foreach ($violations as $violation) {
-                        $errorMessages[] = sprintf('%s: %s', $violation->getPropertyPath(), $violation->getMessage());
-                    }
-
-                    throw new ImportFailedException(sprintf('Validation failed for record: %s', implode(', ', $errorMessages)));
-                }
-
-                $this->entityManager->persist($entity);
-
-                ++$importedCount;
-            }
-
-            $this->entityManager->flush();
+            $importedCount = $this->batchProcessor->processBatch($process, $command->batchData);
 
             $process->setBatchesCount($process->getBatchesCount() - 1);
             $process->setImportedCount($process->getImportedCount() + $importedCount);
@@ -75,9 +47,24 @@ class ImportCommandHandler
             if ($process->getBatchesCount() <= 0) {
                 $process->setStatus('success');
             }
+
+            $this->entityManager->persist($process);
+            $this->entityManager->flush();
+        } catch (ValidationFailedException $e) {
+            $this->entityManager->clear();
+            $process = $this->processRepository->find($command->processId);
+            if (null === $process) {
+                throw new ImportFailedException(sprintf('Process with uuid "%s" not found after validation failure.', $command->processId));
+            }
+            $process->setStatus('failed');
+            $process->setErrorMessage($e->getMessage());
+            $this->entityManager->persist($process);
+            $this->entityManager->flush();
         } catch (\Throwable $e) {
             $process->setStatus('failed');
             $process->setErrorMessage($e->getMessage());
+
+            $this->entityManager->flush();
         }
     }
 }

@@ -19,6 +19,7 @@ use Sylius\ImportExport\Entity\ImportProcess;
 use Sylius\ImportExport\Entity\ImportProcessInterface;
 use Sylius\ImportExport\Messenger\Command\ImportCommand;
 use Sylius\ImportExport\Messenger\Handler\ImportCommandHandler;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 use Symfony\Component\Uid\Uuid;
 use Tests\Sylius\ImportExport\Entity\Dummy;
 use Tests\Sylius\ImportExport\Functional\FunctionalTestCase;
@@ -29,12 +30,15 @@ final class ImportHandlerTest extends FunctionalTestCase
 
     private string $importsDir;
 
+    private RepositoryInterface $processRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->handler = $this->getContainer()->get('sylius_import_export.messenger.command_handler.import');
         $this->importsDir = $this->getContainer()->getParameter('sylius_import_export.import_files_directory');
+        $this->processRepository = $this->getContainer()->get('sylius_import_export.repository.process_import');
 
         $this->clearImportFiles();
     }
@@ -202,7 +206,7 @@ final class ImportHandlerTest extends FunctionalTestCase
 
         $this->handler->__invoke(new ImportCommand($processUuid, $invalidData));
 
-        $this->entityManager->refresh($process);
+        $process = $this->processRepository->find($processUuid);
         $this->assertSame('failed', $process->getStatus());
         $this->assertNotNull($process->getErrorMessage());
         $this->assertStringContainsString('Validation failed', $process->getErrorMessage());
@@ -248,80 +252,80 @@ final class ImportHandlerTest extends FunctionalTestCase
     {
         return [
             'single basic dummy' => [
-            'importData' => [
                 [
-                    'uuid' => 'basic-uuid-1',
-                    'text' => 'Basic Text',
-                    'counter' => 10,
-                    'config' => ['enabled' => false],
+                    [
+                        'uuid' => 'basic-uuid-1',
+                        'text' => 'Basic Text',
+                        'counter' => 10,
+                        'config' => ['enabled' => false],
+                    ],
                 ],
-            ],
-            'expectedCount' => 1,
+                1,
             ],
             'multiple basic dummies' => [
-            'importData' => [
                 [
-                    'uuid' => 'multi-uuid-1',
-                    'text' => 'Multi Text 1',
-                    'counter' => 20,
-                    'config' => ['priority' => 'high'],
+                    [
+                        'uuid' => 'multi-uuid-1',
+                        'text' => 'Multi Text 1',
+                        'counter' => 20,
+                        'config' => ['priority' => 'high'],
+                    ],
+                    [
+                        'uuid' => 'multi-uuid-2',
+                        'text' => 'Multi Text 2',
+                        'counter' => 30,
+                        'config' => ['priority' => 'low'],
+                    ],
                 ],
-                [
-                    'uuid' => 'multi-uuid-2',
-                    'text' => 'Multi Text 2',
-                    'counter' => 30,
-                    'config' => ['priority' => 'low'],
-                ],
-            ],
-            'expectedCount' => 2,
+                2,
             ],
             'complex nested config dummies' => [
-            'importData' => [
                 [
-                    'uuid' => 'complex-uuid-1',
-                    'text' => 'Complex Text 1',
-                    'counter' => 100,
-                    'config' => [
-                        'enabled' => true,
-                        'metadata' => [
-                            'tags' => ['important', 'urgent'],
-                            'created_by' => 'system',
+                    [
+                        'uuid' => 'complex-uuid-1',
+                        'text' => 'Complex Text 1',
+                        'counter' => 100,
+                        'config' => [
+                            'enabled' => true,
+                            'metadata' => [
+                                'tags' => ['important', 'urgent'],
+                                'created_by' => 'system',
+                            ],
+                        ],
+                    ],
+                    [
+                        'uuid' => 'complex-uuid-2',
+                        'text' => 'Complex Text 2',
+                        'counter' => 200,
+                        'config' => [
+                            'enabled' => false,
+                            'settings' => [
+                                'auto_process' => true,
+                                'retry_count' => 3,
+                            ],
                         ],
                     ],
                 ],
-                [
-                    'uuid' => 'complex-uuid-2',
-                    'text' => 'Complex Text 2',
-                    'counter' => 200,
-                    'config' => [
-                        'enabled' => false,
-                        'settings' => [
-                            'auto_process' => true,
-                            'retry_count' => 3,
-                        ],
-                    ],
-                ],
-            ],
-            'expectedCount' => 2,
+                2,
             ],
             'edge case values' => [
-            'importData' => [
                 [
-                    'uuid' => 'edge-uuid-1',
-                    'text' => '',
-                    'counter' => 0,
-                    'config' => [],
-                ],
-                [
-                    'uuid' => 'edge-uuid-2',
-                    'text' => 'Simple edge case text',
-                    'counter' => 999999,
-                    'config' => [
-                        'special_chars' => '!@#$%^&*()_+-={}|[]\\:";\'<>?,./',
+                    [
+                        'uuid' => 'edge-uuid-1',
+                        'text' => 'Valid text',
+                        'counter' => 0,
+                        'config' => [],
+                    ],
+                    [
+                        'uuid' => 'edge-uuid-2',
+                        'text' => 'Simple edge case text',
+                        'counter' => 999999,
+                        'config' => [
+                            'special_chars' => '!@#$%^&*()_+-={}|[]\\:";\'<>?,./',
+                        ],
                     ],
                 ],
-            ],
-            'expectedCount' => 2,
+                2,
             ],
         ];
     }

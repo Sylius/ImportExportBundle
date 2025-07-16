@@ -53,12 +53,21 @@
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
         </service>
 
-        <service id="sylius_import_export.messenger.command_handler.import" class="Sylius\ImportExport\Messenger\Handler\ImportCommandHandler">
-            <argument type="service" id="sylius_import_export.repository.process_import" />
+        <service id="sylius_import_export.validator.import" class="Sylius\ImportExport\Validator\ImportValidator">
+            <argument type="service" id="validator" />
+        </service>
+
+        <service id="sylius_import_export.processor.batch" class="Sylius\ImportExport\Processor\BatchProcessor">
             <argument type="service" id="sylius_import_export.denormalizer.registry" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="sylius.resource_registry" />
-            <argument type="service" id="validator" />
+            <argument type="service" id="sylius_import_export.validator.import" />
+        </service>
+
+        <service id="sylius_import_export.messenger.command_handler.import" class="Sylius\ImportExport\Messenger\Handler\ImportCommandHandler">
+            <argument type="service" id="sylius_import_export.repository.process_import" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sylius_import_export.processor.batch" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
         </service>
