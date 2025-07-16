@@ -3,6 +3,7 @@ imports:
 
 parameters:
     sylius_import_export.export_files_directory: '%kernel.project_dir%/../../../etc/export'
+    sylius_import_export.import_files_directory: '%kernel.project_dir%/../../../etc/import'
 
 twig:
     paths:
