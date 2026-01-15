@@ -43,7 +43,6 @@ class ExportAwareItemNormalizer extends ItemNormalizer
         PropertyMetadataFactoryInterface $propertyMetadataFactory,
         IriConverterInterface $iriConverter,
         ResourceClassResolverInterface $resourceClassResolver,
-        private AbstractItemNormalizer $decorated,
         ?PropertyAccessorInterface $propertyAccessor = null,
         ?NameConverterInterface $nameConverter = null,
         ?ClassMetadataFactoryInterface $classMetadataFactory = null,
@@ -52,6 +51,7 @@ class ExportAwareItemNormalizer extends ItemNormalizer
         ?ResourceAccessCheckerInterface $resourceAccessChecker = null,
         array $defaultContext = [],
         ?TagCollectorInterface $tagCollector = null,
+        private ?AbstractItemNormalizer $decorated = null,
     ) {
         parent::__construct(
             $propertyNameCollectionFactory,
