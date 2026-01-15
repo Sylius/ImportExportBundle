@@ -16,7 +16,6 @@ namespace Sylius\ImportExport\Manager;
 use Sylius\ImportExport\Entity\ExportProcessInterface;
 use Sylius\ImportExport\Exporter\CsvExporter;
 use Sylius\ImportExport\Exporter\JsonExporter;
-use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 final class BatchedExportDataManager implements BatchedExportDataManagerInterface
 {
@@ -27,11 +26,8 @@ final class BatchedExportDataManager implements BatchedExportDataManagerInterfac
 
     private string $temporaryExportsDirectory;
 
-    /** @param RepositoryInterface<ExportProcessInterface> $processRepository */
-    public function __construct(
-        protected RepositoryInterface $processRepository,
-        string $temporaryDirectory,
-    ) {
+    public function __construct(string $temporaryDirectory)
+    {
         $this->temporaryExportsDirectory = sprintf('%s/ongoing/', $temporaryDirectory);
     }
 

@@ -132,7 +132,6 @@
         </service>
 
         <service id="sylius_import_export.export.batched_data_manager" class="Sylius\ImportExport\Manager\BatchedExportDataManager">
-            <argument type="service" id="sylius_import_export.repository.process_export" />
             <argument>%sylius_import_export.export_files_directory%</argument>
         </service>
 
