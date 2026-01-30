@@ -71,7 +71,7 @@ final class ExportHandlerTest extends FunctionalTestCase
             ['serialization_groups' => $serializationGroup],
         );
 
-        $this->handler->__invoke(new ExportCommand($processUid, $ids));
+        $this->handler->__invoke(new ExportCommand($processUid, $ids, 0));
 
         $files = self::getExportFiles($this->exportsDir);
 

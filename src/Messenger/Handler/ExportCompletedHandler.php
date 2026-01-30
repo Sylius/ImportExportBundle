@@ -15,6 +15,7 @@ namespace Sylius\ImportExport\Messenger\Handler;
 
 use Sylius\ImportExport\Entity\ExportProcessInterface;
 use Sylius\ImportExport\Exception\ExportFailedException;
+use Sylius\ImportExport\Exporter\ExporterInterface;
 use Sylius\ImportExport\Manager\BatchedExportDataManagerInterface;
 use Sylius\ImportExport\Messenger\Event\ExportProcessCompleted;
 use Sylius\ImportExport\Resolver\ExporterResolverInterface;
@@ -36,25 +37,21 @@ class ExportCompletedHandler
         if (null === $process) {
             throw new ExportFailedException(sprintf('Process with uuid "%s" not found.', $event->processId));
         }
-        if (null === $this->batchedDataManager->getStorage($process)) {
-            return;
-        }
 
-        $batchedData = $this->batchedDataManager->getBatchedData($process);
-        $data = iterator_to_array(...$batchedData);
+        $exporter = $this->exporterResolver->resolve($process->getFormat());
 
-        if ([] !== $data) {
-            try {
-                $resolver = $this->exporterResolver->resolve($process->getFormat());
-                $outputPath = $resolver->export($data);
+        try {
+            if (!$exporter->supportsBatchedExport()) {
+                $outputPath = $this->exportBatchedData($process, $exporter);
 
-                $process->setStatus('success');
                 $process->setOutput($outputPath);
-            } catch (\Throwable $e) {
-                $process->setStatus('failed');
-                $process->setErrorMessage($e->getMessage());
             }
+        } catch (\Throwable $e) {
+            $process->setStatus('failed');
+            $process->setErrorMessage($e->getMessage());
         }
+
+        $process->setStatus('success');
 
         $this->batchedDataManager->deleteBatchedData($process);
 
@@ -62,5 +59,19 @@ class ExportCompletedHandler
         $this->batchedDataManager->resetStorage($process);
 
         $this->processRepository->add($process);
+    }
+
+    private function exportBatchedData(ExportProcessInterface $process, ExporterInterface $exporter): string
+    {
+        $batchedData = $this->batchedDataManager->getBatchedData($process);
+        $data = array_merge(...iterator_to_array($batchedData));
+
+        return $exporter->export(
+            $data,
+            [
+                'resourceAlias' => $process->getResource(),
+                'batchIndex' => 0,
+            ],
+        );
     }
 }

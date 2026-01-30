@@ -15,6 +15,7 @@
             <argument type="service" id="sylius_import_export.repository.process_export" />
             <argument type="service" id="sylius_import_export.export.command_bus" />
             <argument type="service" id="sylius_import_export.export.batched_data_manager" />
+            <argument type="service" id="sylius_import_export.exporter_resolver" />
 
             <tag name="messenger.message_handler" bus="sylius.command_bus" />
         </service>

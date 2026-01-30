@@ -25,7 +25,7 @@ abstract class Process implements ProcessInterface
 
     protected string $status;
 
-    protected string $output;
+    protected ?string $output = null;
 
     protected ?string $errorMessage = null;
 
@@ -64,12 +64,12 @@ abstract class Process implements ProcessInterface
         $this->uuid = $uuid;
     }
 
-    public function getOutput(): string
+    public function getOutput(): ?string
     {
         return $this->output;
     }
 
-    public function setOutput(string $output): void
+    public function setOutput(?string $output): void
     {
         $this->output = $output;
     }
