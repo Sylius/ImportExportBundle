@@ -1,5 +1,28 @@
 # UPGRADE
 
+## From v0.2.1 to v0.2.2
+
+### `ProcessInterface::output` field type is changed
+
+`ProcessInterface::getOutput()` return type and `ProcessInterface::setOutput()` parameter type
+is widened from `string` to `string|null`.
+
+Before:
+
+```php
+public function getOutput(): string;
+
+public function setOutput(string $output): void;
+```
+
+After:
+
+```php
+public function getOutput(): ?string;
+
+public function setOutput(?string $output): void;
+```
+
 ## From v0.2.0 to v0.2.1
 
 ### Configuration key serialization_group renamed to serialization_groups
