@@ -20,6 +20,20 @@ jobs:
                 symfony: ["^6.4", "^7.3"]
                 mysql: ["8.4"]
 
+        services:
+            mysql:
+                image: mysql:${{ matrix.mysql }}
+                env:
+                    MYSQL_DATABASE: sylius
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
+
         env:
             APP_ENV: test_minimal
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
@@ -36,17 +50,6 @@ jobs:
                     extensions: intl
                     tools: symfony
                     coverage: none
-
-            -
-                name: Shutdown default MySQL
-                run: sudo service mysql stop
-
-            -
-                name: Setup MySQL
-                uses: mirromutth/mysql-action@v1.1
-                with:
-                    mysql version: "${{ matrix.mysql }}"
-                    mysql root password: "root"
 
             -
                 name: Get Composer cache directory
@@ -96,13 +99,9 @@ jobs:
                 run: vendor/bin/console lint:container
 
             -
-                name: Warmup cache
-                run: vendor/bin/console cache:warmup
-
-            -
                 name: Setup database
                 run: |
-                    vendor/bin/console doctrine:database:create
+                    vendor/bin/console doctrine:database:create --if-not-exists
                     vendor/bin/console doctrine:schema:create
 
             -

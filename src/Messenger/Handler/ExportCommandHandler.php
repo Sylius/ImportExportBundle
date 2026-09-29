@@ -50,15 +50,23 @@ class ExportCommandHandler
 
         $process->setBatchesCount($process->getBatchesCount() - 1);
 
-        if (null !== $this->batchManager->getStorage($process)) {
+        $exporter = $this->exporterResolver->resolve($process->getFormat());
+
+        if (null !== $this->batchManager->getStorage($process) && !$exporter->supportsBatchedExport()) {
             $this->batchManager->saveBatch($process, $data);
 
             return;
         }
 
         try {
-            $resolver = $this->exporterResolver->resolve($process->getFormat());
-            $outputPath = $resolver->export($data);
+            $outputPath = $exporter->export(
+                $data,
+                [
+                    'resourceAlias' => $process->getResource(),
+                    'batchIndex' => $command->batchIndex,
+                    'exportFilename' => $process->getOutput(),
+                ],
+            );
 
             $process->setStatus('success');
             $process->setOutput($outputPath);

@@ -18,6 +18,7 @@ class ExportCommand
     public function __construct(
         public string $processId,
         public array $resourceIds,
+        public int $batchIndex,
     ) {
     }
 }

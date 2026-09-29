@@ -24,7 +24,12 @@ final class JsonExporter extends AbstractExporter
         return self::FORMAT;
     }
 
-    public function export(array $data): string
+    public function supportsBatchedExport(): bool
+    {
+        return false;
+    }
+
+    public function export(array $data, array $context): string
     {
         $filename = $this->generateFilePath(self::FORMAT);
 
