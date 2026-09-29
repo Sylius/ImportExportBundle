@@ -17,9 +17,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Sylius\ImportExport\Entity\ExportProcess;
 use Sylius\ImportExport\Entity\ExportProcessInterface;
+use Sylius\ImportExport\Messenger\Command\CreateExportProcess;
 use Sylius\ImportExport\Messenger\Command\ExportCommand;
 use Sylius\ImportExport\Messenger\Handler\ExportCommandHandler;
 use Sylius\ImportExport\Serializer\DefaultSerializationGroups;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\Uuid;
 use Tests\Sylius\ImportExport\Entity\Dummy;
 use Tests\Sylius\ImportExport\Entity\DummyItem;
@@ -82,6 +84,43 @@ final class ExportHandlerTest extends FunctionalTestCase
         $exportedData = (string) file_get_contents($exportedFile);
 
         $this->assertSame($result, $exportedData);
+    }
+
+    #[Test]
+    public function it_marks_csv_export_process_as_failed_when_export_fails(): void
+    {
+        $dummy = $this->createDummy('uuid-1', 'Text A', 1, ['enabled' => true], []);
+        $this->entityManager->persist($dummy);
+        $this->entityManager->flush();
+
+        /** @var MessageBusInterface $commandBus */
+        $commandBus = $this->getContainer()->get('sylius.command_bus');
+
+        if (!is_dir($this->exportsDir . '/ongoing')) {
+            mkdir($this->exportsDir . '/ongoing');
+        }
+
+        chmod($this->exportsDir, 0555);
+
+        try {
+            $commandBus->dispatch(new CreateExportProcess(
+                resource: 'sylius_import_export.test_dummy',
+                format: 'csv',
+                parameters: ['class' => Dummy::class],
+                resourceIds: ['uuid-1'],
+            ));
+        } finally {
+            chmod($this->exportsDir, 0755);
+        }
+
+        $this->entityManager->clear();
+
+        $processes = $this->entityManager->getRepository(ExportProcess::class)->findAll();
+        $this->assertCount(1, $processes);
+
+        $process = $processes[0];
+        $this->assertSame('failed', $process->getStatus());
+        $this->assertNotNull($process->getErrorMessage());
     }
 
     public static function getDummyData(): iterable
