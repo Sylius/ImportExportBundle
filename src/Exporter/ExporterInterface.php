@@ -17,5 +17,7 @@ interface ExporterInterface
 {
     public function getConfig(): array;
 
-    public function export(array $data): string;
+    public function supportsBatchedExport(): bool;
+
+    public function export(array $data, array $context): string;
 }

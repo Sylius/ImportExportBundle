@@ -32,9 +32,9 @@ interface ProcessInterface extends ResourceInterface, TimestampableInterface
 
     public function setResource(string $resource): void;
 
-    public function getOutput(): string;
+    public function getOutput(): ?string;
 
-    public function setOutput(string $output): void;
+    public function setOutput(?string $output): void;
 
     public function getErrorMessage(): ?string;
 

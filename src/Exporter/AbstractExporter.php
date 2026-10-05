@@ -21,6 +21,11 @@ abstract class AbstractExporter implements ExporterInterface
 
     abstract protected function getFormat(): string;
 
+    public function supportsBatchedExport(): bool
+    {
+        return false;
+    }
+
     public function getConfig(): array
     {
         return [

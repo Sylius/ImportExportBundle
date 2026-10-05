@@ -73,7 +73,7 @@ final class ExportHandlerTest extends FunctionalTestCase
             ['serialization_groups' => $serializationGroup],
         );
 
-        $this->handler->__invoke(new ExportCommand($processUid, $ids));
+        $this->handler->__invoke(new ExportCommand($processUid, $ids, 0));
 
         $files = self::getExportFiles($this->exportsDir);
 
@@ -87,7 +87,7 @@ final class ExportHandlerTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function it_marks_csv_export_process_as_failed_when_export_fails(): void
+    public function it_marks_json_export_process_as_failed_when_export_fails(): void
     {
         $dummy = $this->createDummy('uuid-1', 'Text A', 1, ['enabled' => true], []);
         $this->entityManager->persist($dummy);
@@ -105,7 +105,7 @@ final class ExportHandlerTest extends FunctionalTestCase
         try {
             $commandBus->dispatch(new CreateExportProcess(
                 resource: 'sylius_import_export.test_dummy',
-                format: 'csv',
+                format: 'json',
                 parameters: ['class' => Dummy::class],
                 resourceIds: ['uuid-1'],
             ));

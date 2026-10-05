@@ -18,11 +18,14 @@ use Sylius\ImportExport\Exception\ExportFailedException;
 
 final class CsvExporter extends AbstractExporter
 {
+    use ExporterTrait;
+
     public const FORMAT = 'csv';
 
     public function __construct(
         string $exportDirectory,
         private readonly string $delimiter = ',',
+        private readonly bool $writeHeaders = false,
     ) {
         parent::__construct($exportDirectory);
     }
@@ -32,14 +35,26 @@ final class CsvExporter extends AbstractExporter
         return self::FORMAT;
     }
 
-    public function export(array $data): string
+    public function supportsBatchedExport(): bool
+    {
+        return true;
+    }
+
+    public function export(array $data, array $context): string
     {
         $data = $this->normalizeValues($data);
-        $filename = $this->generateFilePath(self::FORMAT);
+        $filename = $context['exportFilename'] ?? $this->generateFilePath(self::FORMAT);
+        $batchIndex = $context['batchIndex'] ?? 0;
 
         try {
-            $writer = Writer::createFromPath($filename, 'w+');
+            $writer = Writer::from($filename, 'a');
             $writer->setDelimiter($this->delimiter);
+
+            if ((0 == $batchIndex) && $this->writeHeaders) {
+                $headers = $this->getHeaders($data);
+                $writer->insertOne($headers);
+            }
+
             $writer->insertAll($data);
         } catch (\Throwable $exception) {
             throw new ExportFailedException($exception->getMessage());

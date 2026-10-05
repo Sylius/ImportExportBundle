@@ -14,16 +14,9 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Manager;
 
 use Sylius\ImportExport\Entity\ExportProcessInterface;
-use Sylius\ImportExport\Exporter\CsvExporter;
-use Sylius\ImportExport\Exporter\JsonExporter;
 
 final class BatchedExportDataManager implements BatchedExportDataManagerInterface
 {
-    private const FILE_BASED_FORMATS = [
-        CsvExporter::FORMAT,
-        JsonExporter::FORMAT,
-    ];
-
     private string $temporaryExportsDirectory;
 
     public function __construct(string $temporaryDirectory)
@@ -33,13 +26,11 @@ final class BatchedExportDataManager implements BatchedExportDataManagerInterfac
 
     public function createStorage(ExportProcessInterface $exportProcess): void
     {
-        if (in_array($exportProcess->getFormat(), self::FILE_BASED_FORMATS)) {
-            $ongoingProcessDirectory = $this->temporaryExportsDirectory . '/' . $exportProcess->getUuid();
-            $exportProcess->setTemporaryDataStorage($ongoingProcessDirectory);
+        $ongoingProcessDirectory = $this->temporaryExportsDirectory . '/' . $exportProcess->getUuid();
+        $exportProcess->setTemporaryDataStorage($ongoingProcessDirectory);
 
-            if (!is_dir($ongoingProcessDirectory)) {
-                mkdir($ongoingProcessDirectory, recursive: true);
-            }
+        if (!is_dir($ongoingProcessDirectory)) {
+            mkdir($ongoingProcessDirectory, recursive: true);
         }
     }
 
