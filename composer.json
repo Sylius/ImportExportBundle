@@ -25,17 +25,17 @@
         "sylius/grid-bundle": "^1.13",
         "sylius/resource-bundle": "^1.13",
         "sylius/ui-bundle": "^2.0",
-        "symfony/dependency-injection": "^6.4 || ^7.3",
-        "symfony/framework-bundle": "^6.4 || ^7.3",
-        "symfony/messenger": "^6.4 || ^7.3",
-        "symfony/property-access": "^6.4 || ^7.3",
-        "symfony/serializer": "^6.4 || ^7.3",
-        "symfony/ux-live-component": "^2.12",
-        "symfony/uid": "^6.4 || ^7.3"
+        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
+        "symfony/framework-bundle": "^6.4 || ^7.4 || ^8.0",
+        "symfony/messenger": "^6.4 || ^7.4 || ^8.0",
+        "symfony/property-access": "^6.4 || ^7.4 || ^8.0",
+        "symfony/serializer": "^6.4 || ^7.4 || ^8.0",
+        "symfony/ux-live-component": "^2.12 || ^3.0",
+        "symfony/uid": "^6.4 || ^7.4 || ^8.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.12",
-        "phpstan/phpstan-doctrine": "^1.5",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
         "phpunit/phpunit": "^10.5",
         "sylius-labs/coding-standard": "^4.4",
         "sylius/test-application": "*",
@@ -52,7 +52,7 @@
     },
     "extra": {
         "symfony": {
-            "require": "^7.3"
+            "require": "^7.4"
         },
         "branch-alias": {
             "dev-main": "1.0-dev"

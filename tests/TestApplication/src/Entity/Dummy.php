@@ -28,7 +28,7 @@ class Dummy implements ResourceInterface
 {
     #[ORM\CustomIdGenerator(null)]
     #[ORM\Id()]
-    #[ORM\Column(name: 'uuid')]
+    #[ORM\Column(name: 'uuid', length: 255)]
     #[Groups(DefaultSerializationGroups::EXPORT_GROUP)]
     private string $uuid;
 
