@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sylius\ImportExport\Provider\ResourceIds;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\DataSource as ORMDataSource;
 use Sylius\Bundle\GridBundle\Doctrine\ORM\Driver as ORMDriver;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
@@ -60,7 +61,7 @@ final class RequestBasedResourcesIdsProvider implements ResourcesIdsProviderInte
         $resourceIdentifier = $this->identifierProvider->getIdentifierField($metadata);
 
         $resourceClass = $metadata->getClass('model');
-        /** @var RepositoryInterface $repository */
+        /** @var EntityRepository&RepositoryInterface $repository */
         $repository = $this->entityManager->getRepository($resourceClass);
 
         $requestConfiguration = $this->requestConfigurationFactory->create($metadata, $request);

@@ -16,7 +16,7 @@ namespace Sylius\ImportExport\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 final class SyliusImportExportExtension extends Extension
 {
@@ -27,8 +27,8 @@ final class SyliusImportExportExtension extends Extension
         $this->processExportConfig($container, $configuration);
         $this->processImportConfig($container, $configuration);
 
-        $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config/'));
-        $loader->load('services.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__, 2) . '/config/'));
+        $loader->load('services.php');
     }
 
     private function processExportConfig(ContainerBuilder $container, array &$config): void
