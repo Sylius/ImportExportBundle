@@ -35,17 +35,17 @@ final class ImportResourceType extends AbstractType
                 'label' => 'sylius_import_export.grid.form.file',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'sylius_import_export.validation.import.file.not_blank',
-                        'groups' => ['sylius'],
-                    ]),
-                    new File([
-                        'maxSize' => $this->fileMaxSize,
-                        'mimeTypes' => $this->allowedMimeTypes,
-                        'mimeTypesMessage' => 'sylius_import_export.validation.import.file.invalid_type',
-                        'maxSizeMessage' => 'sylius_import_export.validation.import.file.max_size',
-                        'groups' => ['sylius'],
-                    ]),
+                    new NotBlank(
+                        message: 'sylius_import_export.validation.import.file.not_blank',
+                        groups: ['sylius'],
+                    ),
+                    new File(
+                        maxSize: $this->fileMaxSize,
+                        mimeTypes: $this->allowedMimeTypes,
+                        mimeTypesMessage: 'sylius_import_export.validation.import.file.invalid_type',
+                        maxSizeMessage: 'sylius_import_export.validation.import.file.max_size',
+                        groups: ['sylius'],
+                    ),
                 ],
             ])
             ->add('resourceClass', HiddenType::class)
